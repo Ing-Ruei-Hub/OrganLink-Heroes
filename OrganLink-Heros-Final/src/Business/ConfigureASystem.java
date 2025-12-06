@@ -73,55 +73,55 @@ public class ConfigureASystem {
                         organizationType = Organization.Type.Admin;
                         organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                         employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                        organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "admin", employee, new AdminRole());
+                        organization.getUserAccountDirectory().createUserAccount("admin", "admin", employee, new AdminRole());
 
                     } else if (enterpriseType == Enterprise.EnterpriseType.Hospital) {
                         if (k == 1) {
                             organizationType = Organization.Type.Doctor;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "doctor", employee, new DoctorRole());
+                            organization.getUserAccountDirectory().createUserAccount("doctor", "doctor", employee, new DoctorRole());
                         } else if (k == 2) { // Add Recipient here
                             organizationType = Organization.Type.Recipient;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "recipient", employee, new RecipientRole());
+                            organization.getUserAccountDirectory().createUserAccount("recipient", "recipient", employee, new RecipientRole());
                         } else if (k == 3) { // New condition for Donor
                             organizationType = Organization.Type.Donor;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "donor", employee, new DonorRole());
+                            organization.getUserAccountDirectory().createUserAccount("donor", "donor", employee, new DonorRole());
                         }
                     } else if (enterpriseType == Enterprise.EnterpriseType.Government) {
                         if (k == 1) {
                             organizationType = Organization.Type.Government;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "gov", employee, new GovernmentRole());
+                            organization.getUserAccountDirectory().createUserAccount("gov", "gov", employee, new GovernmentRole());
                         }
                     } else if (enterpriseType == Enterprise.EnterpriseType.Logistics) {
                         if (k == 1) {
                             organizationType = Organization.Type.Logistics;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "logistics", employee, new LogisticsRole());
+                            organization.getUserAccountDirectory().createUserAccount("logistics", "logistics", employee, new LogisticsRole());
                         } else {
                             organizationType = Organization.Type.CaseManager;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "case", employee, new CaseManagerRole());
+                            organization.getUserAccountDirectory().createUserAccount("case", "case", employee, new CaseManagerRole());
                         }
                     } else if (enterpriseType == Enterprise.EnterpriseType.International) {
                         if (k == 1) {
                             organizationType = Organization.Type.International;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "inter", employee, new InternationalRole());
+                            organization.getUserAccountDirectory().createUserAccount("inter", "inter", employee, new InternationalRole());
                         } else {
                             organizationType = Organization.Type.TransplantCoordinator;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
-                            organization.getUserAccountDirectory().createUserAccount(faker.name().username(), "transplant", employee, new TransplantCoordinatorRole());
+                            organization.getUserAccountDirectory().createUserAccount("transplant", "transplant", employee, new TransplantCoordinatorRole());
                         }
                     }
                 }

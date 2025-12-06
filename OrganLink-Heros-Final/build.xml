@@ -10,6 +10,17 @@
 <project name="OrganLink-Heros-Final" default="default" basedir=".">
     <description>Builds, tests, and runs the project OrganLink-Heros-Final.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="run" depends="init,compile">
+        <java classname="${main.class}" dir="${work.dir}" fork="true">
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+            <jvmarg value="--add-opens=java.base/java.lang=ALL-UNNAMED"/>
+            <arg line="${application.args}"/>
+        </java>
+    </target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 
