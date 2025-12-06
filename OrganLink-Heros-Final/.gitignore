@@ -1,0 +1,86 @@
+# NetBeans Project Files
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nbattrs
+
+# Java Class Files
+*.class
+
+# Jar Files
+*.jar
+*.war
+*.ear
+
+# Log Files
+*.log
+
+# Backup Files
+*.bak
+*~
+#*#
+.#*
+*.swp
+*.swo
+
+# IDE Specific Files
+.idea/             # IntelliJ IDEA
+.vscode/           # Visual Studio Code
+.history/          # VS Code local history
+
+# Operating System Files
+.DS_Store          # macOS
+Thumbs.db          # Windows
+desktop.ini        # Windows
+
+# db4o Database File
+*.db4o
+
+# Compiled source #
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+# Mac
+.localized
+
+# Logs #
+*.log
+log/
+logs/
+
+# REPL history #
+.node_history
+.irb_history
+.pry_history
+.bash_history
+.zsh_history
+
+# Misc #
+.sass-cache/
+.byebug_history
+.webassets-cache
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.docusaurus/
+.temp/
+.DS_Store
+.flaskenv
+.env
+.venv
+
+# Runtime files #
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+venv/
+env/
+
