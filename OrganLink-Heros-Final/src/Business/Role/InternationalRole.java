@@ -3,21 +3,25 @@ package Business.Role;
 
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
-import Business.Organization.InternationalOrganization;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
+import userinterface.InternationalRole.InternationalOfficerWorkAreaJPanel;
 
-/**
- *
- * @author rrheg
- */
 public class InternationalRole extends Role {
-
+    
     @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business) {
-        //return new InternationalWorkAreaJPanel(userProcessContainer, account, (InternationalOrganization)organization, enterprise);
-        return new JPanel();
+    public JPanel createWorkArea(JPanel userProcessContainer, 
+                                 UserAccount account, 
+                                 Organization organization, 
+                                 Enterprise enterprise, 
+                                 EcoSystem business) {
+        return new InternationalOfficerWorkAreaJPanel(
+            userProcessContainer, account, organization, enterprise, business);
     }
     
+    @Override
+    public String toString() {
+        return "International Officer";
+    }
 }
