@@ -78,11 +78,9 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         tblMyRegistrations = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 204, 255));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Recipient Work Area");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
 
         btnNewRegistration.setText("New Registration");
         btnNewRegistration.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +88,6 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
                 btnNewRegistrationActionPerformed(evt);
             }
         });
-        add(btnNewRegistration, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 540, -1, -1));
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -98,7 +95,6 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
                 btnRefreshActionPerformed(evt);
             }
         });
-        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 540, -1, -1));
 
         tblMyRegistrations.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -121,17 +117,40 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblMyRegistrations);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 790, 460));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(140, 140, 140)
+                .addComponent(jLabel1))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(160, 160, 160)
+                .addComponent(btnNewRegistration)
+                .addGap(271, 271, 271)
+                .addComponent(btnRefresh))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addGap(7, 7, 7)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNewRegistration)
+                    .addComponent(btnRefresh)))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNewRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewRegistrationActionPerformed
         // TODO add your handling code here:
         // Navigate to registration form
-        RecipientRegistrationJPanel panel = new RecipientRegistrationJPanel(
-                userProcessContainer, userAccount, recipientOrganization, enterprise);
-        userProcessContainer.add("RecipientRegistrationJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
+
         
     }//GEN-LAST:event_btnNewRegistrationActionPerformed
 
