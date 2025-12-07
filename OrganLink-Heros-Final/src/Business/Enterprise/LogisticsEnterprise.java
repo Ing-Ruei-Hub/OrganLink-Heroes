@@ -1,12 +1,13 @@
 
 package Business.Enterprise;
 
+import Business.Role.LogisticsRole;
 import Business.Role.Role;
 import java.util.ArrayList;
 
 /**
  *
- * @author rrheg
+ * @author eric
  */
 public class LogisticsEnterprise extends Enterprise{
     
@@ -16,7 +17,8 @@ public class LogisticsEnterprise extends Enterprise{
 
     @Override
     public ArrayList<Role> getSupportedRole() {
-        return null;
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(new LogisticsRole());
+        return roles;
     }
-    
 }
