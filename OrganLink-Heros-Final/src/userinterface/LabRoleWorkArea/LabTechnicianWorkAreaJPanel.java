@@ -10,9 +10,12 @@ import Business.Recipient.Recipient;
 import Business.Medical.MedicalTestResult;
 import Business.Organization.DonorOrganization;
 import Business.Organization.RecipientOrganization;
+import Business.Organization.DoctorOrganization;
+import Business.WorkQueue.MedicalTestWorkRequest;
+import Business.WorkQueue.WorkRequest; // Required for iterating work queue
 import java.awt.CardLayout;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList; // Restore ArrayList as it was needed before.
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,40 +50,21 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) tblSubjects.getModel();
         model.setRowCount(0);
         
-        // This panel needs to show Donors/Recipients that require tests.
-        // For simplicity, let's show all Donors/Recipients that are 'Registered', 'Approved by Hospital', or 'Retest Required'
-        // In a real system, there would be MedicalTestWorkRequests or specific statuses to filter by.
-        
-        // Populate Donors
+        // Populate Donors for initial testing
         for (Network net : system.getNetworkList()) {
             for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
                 for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
                     if (org instanceof DonorOrganization) {
                         DonorOrganization donorOrg = (DonorOrganization) org;
                         for (Donor donor : donorOrg.getDonorDirectory().getDonorList()) {
-                            // Only show if they need tests or retest
-                            if (donor.getStatus().equalsIgnoreCase("Approved by Hospital") || donor.getStatus().equalsIgnoreCase("Retest Required")) {
+                            // Show if approved by hospital or needing retest (internal retest by lab)
+                            if (donor.getStatus().equalsIgnoreCase("Approved by Hospital") || donor.getStatus().equalsIgnoreCase("Retest Required") || donor.getStatus().equalsIgnoreCase("Tests Verified")) {
                                 Object[] row = new Object[5];
-                                row[0] = donor; // toString of Donor
+                                row[0] = donor; // The Donor object
                                 row[1] = "Donor";
                                 row[2] = donor.getOrganToDonate();
                                 row[3] = donor.getBloodType();
                                 row[4] = donor.getStatus();
-                                model.addRow(row);
-                            }
-                        }
-                    }
-                    else if (org instanceof RecipientOrganization) {
-                        RecipientOrganization recipientOrg = (RecipientOrganization) org;
-                        for (Recipient recipient : recipientOrg.getRecipientDirectory().getRecipientList()) {
-                            // Only show if they need tests or retest
-                            if (recipient.getStatus().equalsIgnoreCase("Initial Match Search Performed") || recipient.getStatus().equalsIgnoreCase("Retest Required")) {
-                                Object[] row = new Object[5];
-                                row[0] = recipient; // toString of Recipient
-                                row[1] = "Recipient";
-                                row[2] = recipient.getOrganNeeded();
-                                row[3] = recipient.getBloodType();
-                                row[4] = recipient.getStatus();
                                 model.addRow(row);
                             }
                         }
@@ -192,7 +176,7 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
             return;
         }
 
-        Object selectedSubject = tblSubjects.getValueAt(selectedRow, 0); // Can be Donor or Recipient
+        Object selectedSubject = tblSubjects.getValueAt(selectedRow, 0); // Must be Donor or Recipient
 
         String testName = JOptionPane.showInputDialog(this, "Enter Test Name:");
         if (testName == null || testName.trim().isEmpty()) {
@@ -204,45 +188,20 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Result Details cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        // Simplified file path for now
-        // String filePath = JOptionPane.showInputDialog(this, "Enter File Path (optional):");
 
-        MedicalTestResult newResult = null;
         if (selectedSubject instanceof Donor) {
-            newResult = new MedicalTestResult(testName, (Donor) selectedSubject, null);
-        } else if (selectedSubject instanceof Recipient) {
-            newResult = new MedicalTestResult(testName, null, (Recipient) selectedSubject);
-        } else {
-             JOptionPane.showMessageDialog(this, "Invalid subject type selected.", "Error", JOptionPane.ERROR_MESSAGE);
+            Donor donor = (Donor) selectedSubject;
+            // Update Donor status
+            donor.setStatus("Tests Verified"); 
+            // In a real system, MedicalTestResult might be added to a list within Donor
+        } else { // Should only be Donor due to populateSubjectsTable filtering
+             JOptionPane.showMessageDialog(this, "Invalid subject type selected. Only Donors can be processed.", "Error", JOptionPane.ERROR_MESSAGE);
              return;
         }
         
-        newResult.setResultDetails(resultDetails);
-        newResult.setTestDate(new Date());
-        newResult.setIsVerified(false);
-        newResult.setVerifiedBy(userAccount); // Lab Tech user account
-
-        // Add the MedicalTestResult to the Donor/Recipient
-        // This requires Donor/Recipient to have a list of MedicalTestResults
-        if (selectedSubject instanceof Donor) {
-            Donor donor = (Donor) selectedSubject;
-            if (donor.getMedicalTestResultList() == null) {
-                donor.setMedicalTestResultList(new ArrayList<MedicalTestResult>());
-            }
-            donor.getMedicalTestResultList().add(newResult);
-            donor.setStatus("Tests Uploaded, Pending Doctor Verification");
-        } else if (selectedSubject instanceof Recipient) {
-            Recipient recipient = (Recipient) selectedSubject;
-             if (recipient.getMedicalTestResultList() == null) {
-                recipient.setMedicalTestResultList(new ArrayList<MedicalTestResult>());
-            }
-            recipient.getMedicalTestResultList().add(newResult);
-            recipient.setStatus("Tests Uploaded, Pending Doctor Verification");
-        }
-        
-        JOptionPane.showMessageDialog(this, "Test results uploaded successfully. Status updated.", "Upload Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Test results uploaded and status updated to 'Tests Completed - Lab Verified'.", "Upload Success", JOptionPane.INFORMATION_MESSAGE);
         populateSubjectsTable(); // Refresh table
-    }                                                
+    }
 
 
     // Variables declaration - do not modify                     

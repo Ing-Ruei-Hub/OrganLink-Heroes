@@ -31,13 +31,13 @@ public class MatchingService {
                         for (Donor donor : donorOrganization.getDonorDirectory().getDonorList()) {
                             // Check for compatibility
                             // Basic compatibility: organ needed matches organ to donate and blood types match
-                            if (donor.getStatus().equals("Approved by Hospital") || donor.getStatus().equals("Tests Verified")) { // Only consider approved/verified donors
-                                if (donor.getOrganToDonate() != null && donor.getOrganToDonate().equalsIgnoreCase(recipient.getOrganNeeded())) {
-                                    if (donor.getBloodType() != null && donor.getBloodType().equalsIgnoreCase(recipient.getBloodType())) {
-                                        compatibleDonors.add(donor);
-                                    }
+                            
+                            if (donor.getOrganToDonate() != null && donor.getOrganToDonate().equalsIgnoreCase(recipient.getOrganNeeded())) {
+                                if (donor.getBloodType() != null && donor.getBloodType().equalsIgnoreCase(recipient.getBloodType())) {
+                                    compatibleDonors.add(donor);
                                 }
                             }
+                            
                         }
                     }
                 }

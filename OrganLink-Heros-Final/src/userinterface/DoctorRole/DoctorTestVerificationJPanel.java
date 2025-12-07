@@ -58,15 +58,27 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
         for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
             if (request instanceof MedicalTestWorkRequest) {
                 MedicalTestWorkRequest testRequest = (MedicalTestWorkRequest) request;
-                Object[] row = new Object[7];
-                row[0] = testRequest.getSender().getEmployee().getName(); // Lab Technician
-                row[1] = testRequest.getRecipient().getName();
-                row[2] = testRequest.getTestType();
-                row[3] = testRequest.getTestResult();
-                row[4] = testRequest; // The request object itself, for status and actions
-                row[5] = testRequest.getRequestDate() != null ? dateFormat.format(testRequest.getRequestDate()) : "";
-                row[6] = testRequest.getResolveDate() != null ? dateFormat.format(testRequest.getResolveDate()) : "";
-                model.addRow(row);
+                // Filter: Only show requests where this doctor is the receiver AND it's a matched pair
+                if (testRequest.getReceiver() == account && testRequest.getDonor() != null && testRequest.getRecipient() != null) {
+                    Object[] row = new Object[7];
+                    row[0] = testRequest.getSender().getEmployee().getName(); // Lab Technician
+                    
+                    String patientName = "";
+                    if(testRequest.getDonor() != null && testRequest.getRecipient() != null) {
+                        patientName = testRequest.getDonor().getName() + " (D) / " + testRequest.getRecipient().getName() + " (R)";
+                    } else if(testRequest.getDonor() != null) {
+                        patientName = testRequest.getDonor().getName() + " (D)";
+                    } else if (testRequest.getRecipient() != null) {
+                        patientName = testRequest.getRecipient().getName() + " (R)";
+                    }
+                    row[1] = patientName; // Patient Name from Donor or Recipient
+                    row[2] = testRequest.getTestType();
+                    row[3] = testRequest.getTestResult();
+                    row[4] = testRequest; // The request object itself, for status and actions
+                    row[5] = testRequest.getRequestDate() != null ? dateFormat.format(testRequest.getRequestDate()) : "";
+                    row[6] = testRequest.getResolveDate() != null ? dateFormat.format(testRequest.getResolveDate()) : "";
+                    model.addRow(row);
+                }
             }
         }
     }
@@ -223,14 +235,30 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
 
         MedicalTestWorkRequest request = (MedicalTestWorkRequest) tblTestRequests.getValueAt(selectedRow, 4); // Assuming WorkRequest object is at index 4
 
-        if (request.getStatus().equalsIgnoreCase("Completed")) {
-            request.setStatus("Verified by Doctor");
-            request.setResolveDate(new java.util.Date());
-            JOptionPane.showMessageDialog(this, "Medical test result verified successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            populateTestRequestTable();
-        } else {
-            JOptionPane.showMessageDialog(this, "Test result cannot be verified as its status is not 'Completed'.", "Warning", JOptionPane.WARNING_MESSAGE);
+        // Ensure the request is not already processed and is for a matched pair
+        if (request.getDonor() == null || request.getRecipient() == null) {
+            JOptionPane.showMessageDialog(this, "This request is not for a matched pair and cannot be verified here.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        if (request.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination") || request.getStatus().equalsIgnoreCase("Retest Required by Doctor - Match")) {
+            JOptionPane.showMessageDialog(this, "This matched pair test request has already been processed or retest was requested.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        request.setStatus("Verified, Ready for Transport Coordination");
+        request.setResolveDate(new java.util.Date());
+        request.setVerifier(account); // Doctor who verified
+
+        // Assign the request back to the original sender (Transplant Coordinator)
+        UserAccount originalSender = request.getSender();
+        request.setReceiver(originalSender);
+
+        // Update Donor and Recipient status
+        request.getDonor().setStatus("Verified, Ready for Transport Coordination");
+        request.getRecipient().setStatus("Verified, Ready for Transport Coordination");
+
+        JOptionPane.showMessageDialog(this, "Medical test result for matched pair verified and sent to Transplant Coordinator!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        populateTestRequestTable();
     }//GEN-LAST:event_btnVerifyActionPerformed
 
     private void btnRequestRetestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestRetestActionPerformed
@@ -242,20 +270,31 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
 
         MedicalTestWorkRequest request = (MedicalTestWorkRequest) tblTestRequests.getValueAt(selectedRow, 4); // Assuming WorkRequest object is at index 4
 
-        if (request.getStatus().equalsIgnoreCase("Completed") || request.getStatus().equalsIgnoreCase("Pending Doctor Verification")) {
+        // Ensure it's a matched pair request
+        if (request.getDonor() == null || request.getRecipient() == null) {
+            JOptionPane.showMessageDialog(this, "This request is not for a matched pair and retest cannot be requested here.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (request.getStatus().equalsIgnoreCase("Pending Final Doctor Verification") || request.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination") || request.getStatus().equalsIgnoreCase("Retest Required by Doctor - Match")) {
             String retestReason = JOptionPane.showInputDialog(this, "Enter reason for retest:");
             if (retestReason != null && !retestReason.trim().isEmpty()) {
-                request.setStatus("Retest Requested by Doctor");
-                request.setMessage("Retest requested: " + retestReason); // Update message with retest reason
-                request.setReceiver(findLabTechnician()); // Assign back to a Lab Technician
+                request.setStatus("Retest Required by Doctor - Match");
+                request.setMessage("Retest requested by Doctor for Match: " + retestReason); // Update message with retest reason
+                request.setReceiver(request.getSender()); // Assign back to the original sender (Transplant Coordinator)
                 request.setResolveDate(null); // Clear resolve date
-                JOptionPane.showMessageDialog(this, "Retest requested successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Update Donor and Recipient status
+                request.getDonor().setStatus("Retest Required by Doctor - Match");
+                request.getRecipient().setStatus("Retest Required by Doctor - Match");
+
+                JOptionPane.showMessageDialog(this, "Retest for matched pair requested successfully and sent back to Transplant Coordinator!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 populateTestRequestTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Retest reason cannot be empty.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Retest can only be requested for 'Completed' or 'Pending Doctor Verification' results.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Retest can only be requested for 'Pending Final Doctor Verification' or 'Verified, Ready for Transport Coordination' results.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnRequestRetestActionPerformed
 
@@ -270,21 +309,7 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Table refreshed!", "Info", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnRefreshActionPerformed
 
-    // Helper method to find a Lab Technician to assign the retest request to
-    private UserAccount findLabTechnician() {
-        for (Network net : business.getNetworkList()) {
-            for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
-                for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
-                    if (org instanceof LabOrganization) {
-                        if (!org.getUserAccountDirectory().getUserAccountList().isEmpty()) {
-                            return org.getUserAccountDirectory().getUserAccountList().get(0); // Return the first Lab Technician found
-                        }
-                    }
-                }
-            }
-        }
-        return null; // No Lab Technician found
-    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
