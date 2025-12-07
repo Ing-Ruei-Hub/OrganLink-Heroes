@@ -55,12 +55,14 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
             if (request instanceof InternationalCollaborationRequest) {
                 InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) request;
                 
-                Object[] row = new Object[5];
-                row[0] = intlRequest.getMessage();
+                Object[] row = new Object[7]; // Increased size for new columns
+                row[0] = intlRequest; // Display the request object, its toString should provide a unique ID
                 row[1] = intlRequest.getRecipient() != null ? intlRequest.getRecipient().getName() : "Unknown";
                 row[2] = intlRequest.getOrganRequired();
-                row[3] = intlRequest.getStatus();
-                row[4] = dateFormat.format(intlRequest.getRequestDate());
+                row[3] = intlRequest.getRecipient() != null ? intlRequest.getRecipient().getBloodType() : "Unknown"; // Blood Type
+                row[4] = intlRequest.getRecipient() != null ? intlRequest.getRecipient().getUrgencyLevel() : "Unknown"; // Urgency
+                row[5] = intlRequest.getStatus();
+                row[6] = dateFormat.format(intlRequest.getRequestDate());
                 model.addRow(row);
             }
         }
@@ -253,11 +255,11 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Request ID", "Patient Name", "Organ Required", "Status", "Request Date"
+                "Request ID", "Patient Name", "Organ Required", "Blood Type", "Urgency", "Status", "Request Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -372,24 +374,21 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-        String requestId = (String) tblRequests.getValueAt(selectedRow, 0);
+        InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) tblRequests.getValueAt(selectedRow, 0); // Get the request object
         
-        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
-            if (request instanceof InternationalCollaborationRequest) {
-                InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) request;
-                if (intlRequest.getMessage().equals(requestId)) {
-                    intlRequest.setStatus("Searching Internationally");
-                    JOptionPane.showMessageDialog(this, 
-                        "International search initiated for:\n" +
-                        "Patient: " + intlRequest.getRecipient().getName() + "\n" +
-                        "Organ: " + intlRequest.getOrganRequired() + "\n" +
-                        "Blood Type: " + intlRequest.getBloodType(),
-                        "Search Initiated",
-                        JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                }
-            }
+        if (!intlRequest.getStatus().equals("Pending International Review")) {
+            JOptionPane.showMessageDialog(this, "This request is not in 'Pending International Review' status.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
+        
+        intlRequest.setStatus("Searching Internationally");
+        JOptionPane.showMessageDialog(this, 
+            "International search initiated for:\n" +
+            "Patient: " + intlRequest.getRecipient().getName() + "\n" +
+            "Organ: " + intlRequest.getOrganRequired() + "\n" +
+            "Blood Type: " + intlRequest.getRecipient().getBloodType(),
+            "Search Initiated",
+            JOptionPane.INFORMATION_MESSAGE);
         
         populateRequestTable();
         updateStatistics();
@@ -402,27 +401,34 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-        String requestId = (String) tblRequests.getValueAt(selectedRow, 0);
+        InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) tblRequests.getValueAt(selectedRow, 0); // Get the request object
         
+        if (!intlRequest.getStatus().equals("Searching Internationally")) {
+            JOptionPane.showMessageDialog(this, "This request is not currently searching internationally.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         String matchDetails = JOptionPane.showInputDialog(this, "Enter international match details (e.g., Donor country, hospital):");
         if (matchDetails != null && !matchDetails.trim().isEmpty()) {
-            for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
-                if (request instanceof InternationalCollaborationRequest) {
-                    InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) request;
-                    if (intlRequest.getMessage().equals(requestId)) {
-                        intlRequest.setStatus("International Match Found");
-                        intlRequest.setInternationalMatchFound(true);
-                        intlRequest.setInternationalMatchDetails(matchDetails);
-                        JOptionPane.showMessageDialog(this, 
-                            "Match found and recorded!\n" +
-                            "Request: " + requestId + "\n" +
-                            "Details: " + matchDetails,
-                            "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                        break;
-                    }
-                }
+            intlRequest.setStatus("International Match Found");
+            intlRequest.setInternationalMatchFound(true);
+            intlRequest.setInternationalMatchDetails(matchDetails);
+            
+            // Set receiver back to the original sender (Transplant Coordinator)
+            intlRequest.setReceiver(intlRequest.getSender());
+            
+            // Update Recipient status
+            if (intlRequest.getRecipient() != null) {
+                intlRequest.getRecipient().setStatus("International Match Found");
             }
+
+            JOptionPane.showMessageDialog(this, 
+                "Match found and recorded!\n" +
+                "Request: " + intlRequest.getMessage() + "\n" +
+                "Details: " + matchDetails + "\n" +
+                "Request sent back to Transplant Coordinator.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
         }
         
         populateRequestTable();
@@ -436,23 +442,30 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
-        String requestId = (String) tblRequests.getValueAt(selectedRow, 0);
-        
-        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
-            if (request instanceof InternationalCollaborationRequest) {
-                InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) request;
-                if (intlRequest.getMessage().equals(requestId)) {
-                    intlRequest.setStatus("No International Match - Request Closed");
-                    intlRequest.setInternationalMatchFound(false);
-                    JOptionPane.showMessageDialog(this, 
-                        "Request closed - No international match found\n" +
-                        "Request: " + requestId,
-                        "Request Closed",
-                        JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                }
-            }
+        InternationalCollaborationRequest intlRequest = (InternationalCollaborationRequest) tblRequests.getValueAt(selectedRow, 0); // Get the request object
+
+        if (!intlRequest.getStatus().equals("Searching Internationally")) {
+            JOptionPane.showMessageDialog(this, "This request is not currently searching internationally.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
+
+        intlRequest.setStatus("No International Match - Request Closed");
+        intlRequest.setInternationalMatchFound(false);
+        
+        // Set receiver back to the original sender (Transplant Coordinator)
+        intlRequest.setReceiver(intlRequest.getSender());
+        
+        // Update Recipient status
+        if (intlRequest.getRecipient() != null) {
+            intlRequest.getRecipient().setStatus("No International Match Found");
+        }
+        
+        JOptionPane.showMessageDialog(this, 
+            "Request closed - No international match found\n" +
+            "Request: " + intlRequest.getMessage() + "\n" +
+            "Request sent back to Transplant Coordinator.",
+            "Request Closed",
+            JOptionPane.INFORMATION_MESSAGE);
         
         populateRequestTable();
         updateStatistics();

@@ -9,6 +9,8 @@ import Business.Recipient.Recipient;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.MedicalTestWorkRequest;
 import Business.Organization.LabOrganization;
+import Business.Organization.InternationalOrganization;
+import Business.WorkQueue.InternationalCollaborationRequest;
 import Business.Util.MatchingService;
 import java.awt.CardLayout;
 import java.util.Date;
@@ -87,6 +89,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         recipientJTable = new javax.swing.JTable();
         btnFindMatches = new javax.swing.JButton();
         btnSendForLabTest = new javax.swing.JButton();
+        btnRequestInternationalSearch = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         compatibleDonorsJTable = new javax.swing.JTable();
@@ -133,6 +136,13 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         btnSendForLabTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendForLabTestActionPerformed(evt);
+            }
+        });
+
+        btnRequestInternationalSearch.setText("Request International Search");
+        btnRequestInternationalSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestInternationalSearchActionPerformed(evt);
             }
         });
 
@@ -186,7 +196,9 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                                             .addGap(150, 150, 150)
                                             .addComponent(btnFindMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(18, 18, 18)
-                                            .addComponent(btnSendForLabTest, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))                            .addComponent(jScrollPane2))))
+                                            .addComponent(btnSendForLabTest, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btnRequestInternationalSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))                            .addComponent(jScrollPane2))))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -203,7 +215,8 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFindMatches)
-                    .addComponent(btnSendForLabTest))
+                    .addComponent(btnSendForLabTest)
+                    .addComponent(btnRequestInternationalSearch))
                 .addGap(28, 28, 28)
                 .addComponent(lblCompatibleDonors)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -336,11 +349,16 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         JOptionPane.showMessageDialog(this, "Match sent to Lab for testing. Status updated.", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateRecipientTable(); // Refresh recipient table to show status change
         populateCompatibleDonorsTable(null); // Clear compatible donors table or refresh
-    }
+    }                                                 
+
+    private void btnRequestInternationalSearchActionPerformed(java.awt.event.ActionEvent evt) {                                                              
+        // Logic to send request for international search
+    }                                                             
 
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton btnSendForLabTest;
+    private javax.swing.JButton btnRequestInternationalSearch;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnFindMatches;
     private javax.swing.JTable compatibleDonorsJTable;
