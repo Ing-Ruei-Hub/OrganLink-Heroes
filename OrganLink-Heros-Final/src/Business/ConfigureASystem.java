@@ -165,6 +165,22 @@ public class ConfigureASystem {
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
                             organization.getUserAccountDirectory().createUserAccount("logistics", "logistics", employee, new LogisticsRole());
+                            
+                            // ========== INITIALIZE LOGISTICS RESOURCES ==========
+                            LogisticsOrganization logOrg = (LogisticsOrganization) organization;
+        
+                            // Create test transport vehicles
+                            logOrg.getVehicleDirectory().createVehicle("Mercedes Sprinter", "ABC-1234");
+                            logOrg.getVehicleDirectory().createVehicle("Ford Transit", "XYZ-5678");
+                            logOrg.getVehicleDirectory().createVehicle("Helicopter H145", "HELI-001");
+                            logOrg.getVehicleDirectory().createVehicle("Toyota HiAce", "DEF-9012");
+        
+                            // Create test logistics teams
+                            logOrg.getTeamDirectory().createTeam("Alpha Team");
+                            logOrg.getTeamDirectory().createTeam("Beta Team");
+                            logOrg.getTeamDirectory().createTeam("Emergency Response");
+                            logOrg.getTeamDirectory().createTeam("Night Shift Team");
+                            
                         } else {
                             organizationType = Organization.Type.CaseManager;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
