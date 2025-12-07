@@ -4,6 +4,7 @@ package Business.Organization;
 import Business.Role.DonorRole;
 import Business.Role.Role;
 import java.util.ArrayList;
+import Business.Donor.DonorDirectory; // Import the new DonorDirectory class
 
 /**
  *
@@ -11,8 +12,11 @@ import java.util.ArrayList;
  */
 public class DonorOrganization extends Organization {
     
-     public DonorOrganization() {
+    private DonorDirectory donorDirectory; // Declare DonorDirectory
+    
+    public DonorOrganization() {
         super(Type.Donor.getValue());
+        donorDirectory = new DonorDirectory(); // Initialize in constructor
     }
     
     @Override
@@ -20,6 +24,14 @@ public class DonorOrganization extends Organization {
         ArrayList<Role> roles = new ArrayList<>();
         roles.add(new DonorRole());
         return roles;
+    }
+    
+    // Getter for DonorDirectory
+    public DonorDirectory getDonorDirectory() {
+        if(donorDirectory == null){ // Defensive check for deserialization of old objects
+            donorDirectory = new DonorDirectory();
+        }
+        return donorDirectory;
     }
     
 }

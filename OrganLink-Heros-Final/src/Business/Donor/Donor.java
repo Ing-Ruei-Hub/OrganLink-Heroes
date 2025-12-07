@@ -1,6 +1,9 @@
 package Business.Donor;
 
+import Business.Medical.MedicalTestResult; // Import MedicalTestResult
+import java.util.ArrayList; // Import ArrayList
 import java.util.Date;
+import java.util.List; // Import List
 
 public class Donor {
 
@@ -13,6 +16,7 @@ public class Donor {
     private String status; // e.g., "Registered", "Approved", "Medical Tests Pending", "Compatible"
     private String contactNumber;
     private String email;
+    private List<MedicalTestResult> medicalTestResultList; // New field to store test results
 
     private static int counter = 0;
 
@@ -20,6 +24,7 @@ public class Donor {
         this.name = name;
         this.donorId = "DON" + counter++;
         this.status = "Registered"; // Default status
+        this.medicalTestResultList = new ArrayList<>(); // Initialize the list
     }
 
     public String getName() {
@@ -91,6 +96,15 @@ public class Donor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    // New Getters and Setters for medicalTestResultList
+    public List<MedicalTestResult> getMedicalTestResultList() {
+        return medicalTestResultList;
+    }
+
+    public void setMedicalTestResultList(List<MedicalTestResult> medicalTestResultList) {
+        this.medicalTestResultList = medicalTestResultList;
     }
 
     @Override

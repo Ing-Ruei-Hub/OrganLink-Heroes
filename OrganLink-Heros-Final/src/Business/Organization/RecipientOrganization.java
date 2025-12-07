@@ -4,6 +4,7 @@ package Business.Organization;
 import Business.Role.RecipientRole;
 import Business.Role.Role;
 import java.util.ArrayList;
+import Business.Recipient.RecipientDirectory; // Import the new RecipientDirectory class
 
 /**
  *
@@ -11,8 +12,11 @@ import java.util.ArrayList;
  */
 public class RecipientOrganization extends Organization{
     
+    private RecipientDirectory recipientDirectory; // Declare RecipientDirectory
+    
     public RecipientOrganization() {
         super(Type.Recipient.getValue());
+        recipientDirectory = new RecipientDirectory(); // Initialize in constructor
     }
     
     @Override
@@ -20,6 +24,14 @@ public class RecipientOrganization extends Organization{
         ArrayList<Role> roles = new ArrayList<>();
         roles.add(new RecipientRole());
         return roles;
+    }
+    
+    // Getter for RecipientDirectory
+    public RecipientDirectory getRecipientDirectory() {
+        if(recipientDirectory == null){ // Defensive check for deserialization of old objects
+            recipientDirectory = new RecipientDirectory();
+        }
+        return recipientDirectory;
     }
     
 }
