@@ -1,13 +1,12 @@
-
 package Business.Role;
 
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
-import Business.Organization.GovernmentOrganization;
+import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
-
+import userinterface.GovernmentRole.GovernmentWorkAreaJPanel;
 /**
  *
  * @author rrheg
@@ -15,9 +14,18 @@ import javax.swing.JPanel;
 public class GovernmentRole extends Role {
 
     @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business) {
-        //return new GovernmentWorkAreaJPanel(userProcessContainer, account, (GovernmentOrganization)organization, enterprise);
-        return new JPanel();
+    public JPanel createWorkArea(JPanel userProcessContainer, 
+                                 UserAccount account, 
+                                 Organization organization, 
+                                 Enterprise enterprise, 
+                                 EcoSystem business) {
+        return new GovernmentWorkAreaJPanel(
+            userProcessContainer, account, organization, enterprise, business, null);
+    }
+    
+    @Override
+    public String toString() {
+        return "Government Official";
     }
     
 }
