@@ -70,7 +70,7 @@ public class ConfigureASystem {
                 enterprise = network.getEnterpriseDirectory().createAndAddEnterprise(enterpriseType.getValue(), enterpriseType);
 
                 // Create 2-3 Organizations per Enterprise
-                for (int k = 0; k < (enterpriseType == Enterprise.EnterpriseType.Hospital ? 5 : 3); k++) { // 2 for even, 3 for odd enterprise index
+                for (int k = 0; k < (enterpriseType == Enterprise.EnterpriseType.Hospital ? 6 : 3); k++) { // 2 for even, 3 for odd enterprise index
                     Organization organization;
                     Organization.Type organizationType;
 
@@ -95,7 +95,7 @@ public class ConfigureASystem {
                             // Generate and add some recipients
                             for (int r = 0; r < 3; r++) { // Create 3 recipients
                                 Recipient recipient = new Recipient(faker.name().fullName());
-                                recipient.setBloodType(faker.options().option("A+"));
+                                recipient.setBloodType(faker.options().option("A+","B-","B+"));
                                 recipient.setOrganNeeded(faker.options().option("Kidney"));
                                 recipient.setDateOfBirth(faker.date().birthday());
                                 recipient.setContactNumber(faker.phoneNumber().phoneNumber());
@@ -112,9 +112,9 @@ public class ConfigureASystem {
                             donorOrganization.getUserAccountDirectory().createUserAccount("donor", "donor", employee, new DonorRole());
                             System.out.print('a');
                             // Generate and add some donors
-                            for (int d = 0; d < 3; d++) { // Create 3 donors
+                            for (int d = 0; d < 10; d++) { // Create 3 donors
                                 Donor donor = new Donor(faker.name().fullName());
-                                donor.setBloodType(faker.options().option("A+"));
+                                donor.setBloodType(faker.options().option("A-", "B-"));
                                 donor.setOrganToDonate(faker.options().option("Kidney"));
                                 donor.setDateOfBirth(faker.date().birthday());
                                 donor.setContactNumber(faker.phoneNumber().phoneNumber());
@@ -151,7 +151,12 @@ public class ConfigureASystem {
                                     sampleDonor.getMedicalTestResultList().add(result2);
                                 }
                             }
-                        }
+                        }else if (k == 5) { 
+                            organizationType = Organization.Type.HospitalOfficer;
+                            organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
+                            employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
+                            organization.getUserAccountDirectory().createUserAccount("hos", "hos", employee, new HospitalOfficerRole());
+                        }                        
                     } else if (enterpriseType == Enterprise.EnterpriseType.Government) {
                         if (k == 1) {
                             organizationType = Organization.Type.Government;
@@ -159,7 +164,8 @@ public class ConfigureASystem {
                             employee = organization.getEmployeeDirectory().createEmployee(faker.name().fullName());
                             organization.getUserAccountDirectory().createUserAccount("gov", "gov", employee, new GovernmentRole());
                         }
-                    } else if (enterpriseType == Enterprise.EnterpriseType.Logistics) {
+                    } 
+                    else if (enterpriseType == Enterprise.EnterpriseType.Logistics) {
                         if (k == 1) {
                             organizationType = Organization.Type.Logistics;
                             organization = enterprise.getOrganizationDirectory().createOrganization(organizationType);
