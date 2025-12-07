@@ -7,6 +7,7 @@ import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
+
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,8 +26,11 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
+        //dB4OUtil.deleteDatabaseFile();
         system = dB4OUtil.retrieveSystem();
         this.setSize(1680, 1050);
+        
+
     }
 
     /**
@@ -134,6 +138,7 @@ public class MainJFrame extends javax.swing.JFrame {
         
         Enterprise inEnterprise=null;
         Organization inOrganization=null;
+        Network inNetwork = null; // Introduce inNetwork variable
         
         if(userAccount==null){
             //Step 2: Go inside each network and check each enterprise
@@ -146,6 +151,7 @@ public class MainJFrame extends javax.swing.JFrame {
                        for(Organization organization:enterprise.getOrganizationDirectory().getOrganizationList()){
                            userAccount=organization.getUserAccountDirectory().authenticateUser(userName, password);
                            if(userAccount!=null){
+                               inNetwork = network; // Store network
                                inEnterprise=enterprise;
                                inOrganization=organization;
                                break;
@@ -154,6 +160,7 @@ public class MainJFrame extends javax.swing.JFrame {
                         
                     }
                     else{
+                       inNetwork = network; // Store network
                        inEnterprise=enterprise;
                        break;
                     }
@@ -173,7 +180,7 @@ public class MainJFrame extends javax.swing.JFrame {
         }
         else{
             CardLayout layout=(CardLayout)container.getLayout();
-            container.add("workArea",userAccount.getRole().createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
+            container.add("workArea",userAccount.getRole().createWorkArea(container, userAccount, inOrganization, inEnterprise, inNetwork, system)); // Pass inNetwork
             layout.next(container);
         }
         

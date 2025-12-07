@@ -73,4 +73,13 @@ public class DB4OUtil {
         conn.close();
         return system;
     }
+
+    public void deleteDatabaseFile() {
+        try {
+            java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get(FILENAME));
+            System.out.println("DEBUG: Databank.db4o file deleted successfully.");
+        } catch (java.io.IOException e) {
+            System.err.println("ERROR: Could not delete Databank.db4o file: " + e.getMessage());
+        }
+    }
 }

@@ -6,6 +6,7 @@ package userinterface.InternationalRole;
 
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
+import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.InternationalCollaborationRequest;
@@ -23,11 +24,13 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
     private Organization organization;
     private Enterprise enterprise;
     private EcoSystem business;
+    private Network network; // Added Network instance variable
 
     public InternationalOfficerWorkAreaJPanel(JPanel userProcessContainer, 
                                               UserAccount account, 
                                               Organization organization, 
                                               Enterprise enterprise, 
+                                              Network network, // Added Network parameter
                                               EcoSystem business) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
@@ -35,6 +38,7 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         this.organization = organization;
         this.enterprise = enterprise;
         this.business = business;
+        this.network = network; // Initialize Network
         
         lblWelcome.setText("Welcome, " + account.getEmployee().getName());
         populateRequestTable();
