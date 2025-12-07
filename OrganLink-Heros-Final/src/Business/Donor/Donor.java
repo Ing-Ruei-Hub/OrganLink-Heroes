@@ -16,6 +16,7 @@ public class Donor {
     private String status; // e.g., "Registered", "Approved", "Medical Tests Pending", "Compatible"
     private String contactNumber;
     private String email;
+    private int age;
     private List<MedicalTestResult> medicalTestResultList; // New field to store test results
 
     private static int counter = 0;
@@ -96,6 +97,14 @@ public class Donor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
     
     // New Getters and Setters for medicalTestResultList

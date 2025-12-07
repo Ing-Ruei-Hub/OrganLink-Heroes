@@ -8,6 +8,7 @@ import Business.Organization.DonorOrganization;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
+import userinterface.DonorRole.DonorWorkAreaJPanel;
 
 /**
  *
@@ -15,10 +16,12 @@ import javax.swing.JPanel;
  */
 public class DonorRole extends Role{
 
-    @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, Network network, EcoSystem business) {
-        //return new DonorWorkAreaJPanel(userProcessContainer, account, (DonorOrganization)organization, enterprise);
-        return new JPanel();
+        return new DonorWorkAreaJPanel(userProcessContainer, account, organization, enterprise);
     }
     
+    @Override
+    public String toString() {
+        return "Donor";
+    }
 }
