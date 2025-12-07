@@ -1,6 +1,7 @@
 
 package Business.Organization;
 
+import Business.Donor.DonorDirectory;
 import Business.WorkQueue.WorkQueue;
 import Business.Employee.EmployeeDirectory;
 import Business.Role.Role;
@@ -12,12 +13,16 @@ import java.util.ArrayList;
  * @author rrheg
  */
 public abstract class Organization {
-     private String name;
+    
+    private String name;
     private UserAccountDirectory userAccountDirectory;
     private EmployeeDirectory employeeDirectory;
     private WorkQueue workQueue;
+    private DonorDirectory donorDirectory;
     private int organizationID;
     private static int counter=0;
+
+
     
     public enum Type{
         Admin("Admin Organization"),
@@ -76,6 +81,16 @@ public abstract class Organization {
         this.name = name;
     }
     
+    public DonorDirectory getDonorDirectory() {
+        if (donorDirectory == null) {
+            donorDirectory = new DonorDirectory();
+        }
+        return donorDirectory;
+    }
+    
+    public void setDonorDirectory(DonorDirectory donorDirectory) {
+        this.donorDirectory = donorDirectory;
+    }
     @Override
     public String toString() {
         return name;
