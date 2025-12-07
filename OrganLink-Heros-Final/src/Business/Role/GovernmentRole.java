@@ -17,10 +17,11 @@ public class GovernmentRole extends Role {
     public JPanel createWorkArea(JPanel userProcessContainer, 
                                  UserAccount account, 
                                  Organization organization, 
-                                 Enterprise enterprise, 
+                                 Enterprise enterprise,
+                                 Network network,
                                  EcoSystem business) {
         return new GovernmentWorkAreaJPanel(
-            userProcessContainer, account, organization, enterprise, business, null);
+            userProcessContainer, account, organization, enterprise, business, network);
     }
     
     @Override

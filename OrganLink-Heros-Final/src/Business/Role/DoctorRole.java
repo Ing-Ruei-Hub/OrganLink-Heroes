@@ -17,14 +17,15 @@ import userinterface.DoctorRole.DoctorWorkAreaJPanel;
  */
 public class DoctorRole extends Role{
 
-     @Override
+    @Override
     public JPanel createWorkArea(JPanel userProcessContainer, 
                                  UserAccount account, 
                                  Organization organization, 
-                                 Enterprise enterprise, 
+                                 Enterprise enterprise,
+                                 Network network,
                                  EcoSystem business) {
         return new DoctorWorkAreaJPanel(
-            userProcessContainer, account, organization, enterprise, business, null);
+            userProcessContainer, account, organization, enterprise, business, network);
     }
     
     @Override
