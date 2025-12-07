@@ -78,12 +78,6 @@ public class MedicalTestWorkRequest extends WorkRequest {
 
     @Override
     public String toString() {
-        String subjectName = "";
-        if (donor != null) {
-            subjectName = donor.getName();
-        } else if (recipient != null) {
-            subjectName = recipient.getName();
-        }
-        return "Test for " + subjectName + " (" + testType + ") - " + getStatus();
+        return getStatus();
     }
 }

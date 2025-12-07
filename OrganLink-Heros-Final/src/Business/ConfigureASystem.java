@@ -120,7 +120,7 @@ public class ConfigureASystem {
                                 donor.setContactNumber(faker.phoneNumber().phoneNumber());
                                 donor.setEmail(faker.internet().emailAddress());
                                 donor.setMedicalHistory(faker.lorem().sentence());
-                                donor.setStatus("Tests Verified"); // Set initial status
+                                donor.setStatus(faker.options().option("Tests Verified", "Approved by Hospital")); // Set initial status
                                 donorOrganization.getDonorDirectory().addDonor(donor);
                             }
                         } else if (k == 4) { // New condition for Lab

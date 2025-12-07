@@ -10,9 +10,12 @@ import Business.Recipient.Recipient;
 import Business.Medical.MedicalTestResult;
 import Business.Organization.DonorOrganization;
 import Business.Organization.RecipientOrganization;
+import Business.Organization.DoctorOrganization;
+import Business.WorkQueue.MedicalTestWorkRequest;
+import Business.WorkQueue.WorkRequest; // Required for iterating work queue
 import java.awt.CardLayout;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList; // Restore ArrayList as it was needed before.
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,44 +50,41 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) tblSubjects.getModel();
         model.setRowCount(0);
         
-        // This panel needs to show Donors/Recipients that require tests.
-        // For simplicity, let's show all Donors/Recipients that are 'Registered', 'Approved by Hospital', or 'Retest Required'
-        // In a real system, there would be MedicalTestWorkRequests or specific statuses to filter by.
-        
-        // Populate Donors
-        for (Network net : system.getNetworkList()) {
-            for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
-                for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
-                    if (org instanceof DonorOrganization) {
-                        DonorOrganization donorOrg = (DonorOrganization) org;
-                        for (Donor donor : donorOrg.getDonorDirectory().getDonorList()) {
-                            // Only show if they need tests or retest
-                            if (donor.getStatus().equalsIgnoreCase("Approved by Hospital") || donor.getStatus().equalsIgnoreCase("Retest Required")) {
-                                Object[] row = new Object[5];
-                                row[0] = donor; // toString of Donor
-                                row[1] = "Donor";
-                                row[2] = donor.getOrganToDonate();
-                                row[3] = donor.getBloodType();
-                                row[4] = donor.getStatus();
-                                model.addRow(row);
-                            }
-                        }
+        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
+            if (request instanceof MedicalTestWorkRequest) {
+                MedicalTestWorkRequest mRequest = (MedicalTestWorkRequest) request;
+                // Only show requests assigned to this lab technician and in "Pending Lab Tests" status
+                if (mRequest.getReceiver() == userAccount && mRequest.getStatus().equalsIgnoreCase("Pending Lab Tests")) {
+                    Object[] row = new Object[6];
+                    String subjectName = "";
+                    String subjectType = "";
+                    String organ = "";
+                    String bloodType = "";
+
+                    if (mRequest.getDonor() != null && mRequest.getRecipient() != null) {
+                        subjectName = mRequest.getDonor().getName() + " (D) / " + mRequest.getRecipient().getName() + " (R)";
+                        subjectType = "Match";
+                        organ = mRequest.getDonor().getOrganToDonate(); // Or mRequest.getRecipient().getOrganNeeded()
+                        bloodType = mRequest.getDonor().getBloodType(); // Assuming compatible blood types for a match
+                    } else if (mRequest.getDonor() != null) {
+                        subjectName = mRequest.getDonor().getName();
+                        subjectType = "Donor";
+                        organ = mRequest.getDonor().getOrganToDonate();
+                        bloodType = mRequest.getDonor().getBloodType();
+                    } else if (mRequest.getRecipient() != null) {
+                        subjectName = mRequest.getRecipient().getName();
+                        subjectType = "Recipient";
+                        organ = mRequest.getRecipient().getOrganNeeded();
+                        bloodType = mRequest.getRecipient().getBloodType();
                     }
-                    else if (org instanceof RecipientOrganization) {
-                        RecipientOrganization recipientOrg = (RecipientOrganization) org;
-                        for (Recipient recipient : recipientOrg.getRecipientDirectory().getRecipientList()) {
-                            // Only show if they need tests or retest
-                            if (recipient.getStatus().equalsIgnoreCase("Initial Match Search Performed") || recipient.getStatus().equalsIgnoreCase("Retest Required")) {
-                                Object[] row = new Object[5];
-                                row[0] = recipient; // toString of Recipient
-                                row[1] = "Recipient";
-                                row[2] = recipient.getOrganNeeded();
-                                row[3] = recipient.getBloodType();
-                                row[4] = recipient.getStatus();
-                                model.addRow(row);
-                            }
-                        }
-                    }
+                    
+                    row[0] = subjectName;
+                    row[1] = subjectType;
+                    row[2] = organ;
+                    row[3] = bloodType;
+                    row[4] = mRequest.getStatus();
+                    row[5] = mRequest; // The request object itself
+                    model.addRow(row);
                 }
             }
         }
@@ -117,17 +117,17 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
 
         tblSubjects.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "Type", "Organ", "Blood Type", "Status"
+                "Subject Name", "Type", "Organ", "Blood Type", "Status", "Request"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -188,13 +188,18 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
     private void btnUploadResultsActionPerformed(java.awt.event.ActionEvent evt) {                                                 
         int selectedRow = tblSubjects.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a Donor or Recipient.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a Medical Test Request.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        Object selectedSubject = tblSubjects.getValueAt(selectedRow, 0); // Can be Donor or Recipient
+        MedicalTestWorkRequest request = (MedicalTestWorkRequest) tblSubjects.getValueAt(selectedRow, 5); // MedicalTestWorkRequest object is at index 5
 
-        String testName = JOptionPane.showInputDialog(this, "Enter Test Name:");
+        if (request.getStatus().equalsIgnoreCase("Tests Uploaded, Pending Doctor Verification")) {
+            JOptionPane.showMessageDialog(this, "Test results for this request have already been uploaded.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        String testName = JOptionPane.showInputDialog(this, "Enter Test Name:", request.getTestType()); // Pre-fill with existing test type
         if (testName == null || testName.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Test Name cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -204,43 +209,53 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Result Details cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        // Simplified file path for now
-        // String filePath = JOptionPane.showInputDialog(this, "Enter File Path (optional):");
 
-        MedicalTestResult newResult = null;
-        if (selectedSubject instanceof Donor) {
-            newResult = new MedicalTestResult(testName, (Donor) selectedSubject, null);
-        } else if (selectedSubject instanceof Recipient) {
-            newResult = new MedicalTestResult(testName, null, (Recipient) selectedSubject);
-        } else {
-             JOptionPane.showMessageDialog(this, "Invalid subject type selected.", "Error", JOptionPane.ERROR_MESSAGE);
-             return;
+        // Update the MedicalTestWorkRequest with results
+        request.setTestType(testName);
+        request.setTestResult(resultDetails);
+        request.setRequestDate(new Date()); // Update request date or use resolve date for lab
+        request.setStatus("Tests Uploaded, Pending Doctor Verification");
+
+        // Find a Doctor Organization to send the request to
+        Organization orgToReceive = null;
+        UserAccount doctorAccount = null; // Declare here so it's accessible
+        for (Network net : system.getNetworkList()) {
+            for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
+                for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
+                    if (org instanceof DoctorOrganization) {
+                        orgToReceive = org;
+                        if (!org.getUserAccountDirectory().getUserAccountList().isEmpty()) {
+                            doctorAccount = org.getUserAccountDirectory().getUserAccountList().get(0); // Assign to the first doctor found
+                            break; // Found a doctor, break inner loop
+                        }
+                    }
+                }
+                if (orgToReceive != null && doctorAccount != null) break; // Found org and doctor, break middle loop
+            }
+            if (orgToReceive != null && doctorAccount != null) break; // Found org and doctor, break outer loop
         }
         
-        newResult.setResultDetails(resultDetails);
-        newResult.setTestDate(new Date());
-        newResult.setIsVerified(false);
-        newResult.setVerifiedBy(userAccount); // Lab Tech user account
-
-        // Add the MedicalTestResult to the Donor/Recipient
-        // This requires Donor/Recipient to have a list of MedicalTestResults
-        if (selectedSubject instanceof Donor) {
-            Donor donor = (Donor) selectedSubject;
-            if (donor.getMedicalTestResultList() == null) {
-                donor.setMedicalTestResultList(new ArrayList<MedicalTestResult>());
-            }
-            donor.getMedicalTestResultList().add(newResult);
-            donor.setStatus("Tests Uploaded, Pending Doctor Verification");
-        } else if (selectedSubject instanceof Recipient) {
-            Recipient recipient = (Recipient) selectedSubject;
-             if (recipient.getMedicalTestResultList() == null) {
-                recipient.setMedicalTestResultList(new ArrayList<MedicalTestResult>());
-            }
-            recipient.getMedicalTestResultList().add(newResult);
-            recipient.setStatus("Tests Uploaded, Pending Doctor Verification");
+        if (doctorAccount == null || orgToReceive == null) { // Check for both doctor and organization
+            JOptionPane.showMessageDialog(this, "No Doctor User Accounts or Doctor Organization found to send the request to.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         
-        JOptionPane.showMessageDialog(this, "Test results uploaded successfully. Status updated.", "Upload Success", JOptionPane.INFORMATION_MESSAGE);
+        request.setReceiver(doctorAccount); // Assign to the specific doctor user account
+        
+        // Add to work queue of Lab Technician's organization (current organization)
+        organization.getWorkQueue().getWorkRequestList().add(request);
+        
+        // Add to work queue of the Doctor Organization
+        orgToReceive.getWorkQueue().getWorkRequestList().add(request);
+
+        // Update Donor/Recipient status based on the request's new status
+        if (request.getDonor() != null) {
+            request.getDonor().setStatus("Tests Uploaded, Pending Doctor Verification");
+        } else if (request.getRecipient() != null) {
+            request.getRecipient().setStatus("Tests Uploaded, Pending Doctor Verification");
+        }
+        
+        JOptionPane.showMessageDialog(this, "Test results uploaded and sent for doctor verification.", "Upload Success", JOptionPane.INFORMATION_MESSAGE);
         populateSubjectsTable(); // Refresh table
     }                                                
 

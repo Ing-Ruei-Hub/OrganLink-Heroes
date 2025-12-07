@@ -7,8 +7,11 @@ import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.Recipient.Recipient;
 import Business.UserAccount.UserAccount;
+import Business.WorkQueue.MedicalTestWorkRequest;
+import Business.Organization.LabOrganization;
 import Business.Util.MatchingService;
 import java.awt.CardLayout;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -83,6 +86,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         recipientJTable = new javax.swing.JTable();
         btnFindMatches = new javax.swing.JButton();
+        btnSendForLabTest = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         compatibleDonorsJTable = new javax.swing.JTable();
@@ -122,6 +126,13 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
+            }
+        });
+
+        btnSendForLabTest.setText("Send for Lab Test");
+        btnSendForLabTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSendForLabTestActionPerformed(evt);
             }
         });
 
@@ -171,10 +182,11 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                             .addComponent(jLabel2)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(150, 150, 150)
-                                .addComponent(btnFindMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2))))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(150, 150, 150)
+                                            .addComponent(btnFindMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btnSendForLabTest, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))                            .addComponent(jScrollPane2))))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -189,7 +201,9 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnFindMatches)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFindMatches)
+                    .addComponent(btnSendForLabTest))
                 .addGap(28, 28, 28)
                 .addComponent(lblCompatibleDonors)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -217,7 +231,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             selectedRecipient.setStatus("No Matches Found");
         } else {
             JOptionPane.showMessageDialog(this, compatibleDonors.size() + " compatible donor(s) found for " + selectedRecipient.getName() + ".", "Matches Found", JOptionPane.INFORMATION_MESSAGE);
-            selectedRecipient.setStatus("Initial Match Search Performed"); // Or "Matches Found"
+            selectedRecipient.setStatus("Matches Found"); // Or "Matches Found"
         }
         
         // Refresh the recipient table to reflect status change
@@ -226,7 +240,11 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
 
     private void populateCompatibleDonorsTable(List<Donor> compatibleDonors) {
         DefaultTableModel model = (DefaultTableModel) compatibleDonorsJTable.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0); // Always clear the table
+
+        if (compatibleDonors == null || compatibleDonors.isEmpty()) {
+            return; // If list is null or empty, just clear and return
+        }
 
         for (Donor donor : compatibleDonors) {
             Object[] row = new Object[4];
@@ -244,8 +262,85 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         layout.previous(userProcessContainer);
     }                                       
 
+    private void btnSendForLabTestActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        int selectedRecipientRow = recipientJTable.getSelectedRow();
+        if (selectedRecipientRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a Recipient from the Recipient List.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int selectedDonorRow = compatibleDonorsJTable.getSelectedRow();
+        if (selectedDonorRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a compatible Donor from the Compatible Donors list.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 0);
+        Donor selectedDonor = (Donor) compatibleDonorsJTable.getValueAt(selectedDonorRow, 0);
+
+        // Check if the selected donor/recipient are already undergoing testing or verification
+        if (selectedDonor.getStatus().equalsIgnoreCase("Pending Lab Tests") || selectedDonor.getStatus().equalsIgnoreCase("Tests Uploaded, Pending Doctor Verification")) {
+            JOptionPane.showMessageDialog(this, "This Donor is already undergoing testing or verification.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (selectedRecipient.getStatus().equalsIgnoreCase("Pending Lab Tests") || selectedRecipient.getStatus().equalsIgnoreCase("Tests Uploaded, Pending Doctor Verification")) {
+            JOptionPane.showMessageDialog(this, "This Recipient is already undergoing testing or verification.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        // Find a Lab Organization to send the request to
+        LabOrganization labOrg = null;
+        for (Network net : system.getNetworkList()) {
+            for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
+                for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
+                    if (org instanceof LabOrganization) {
+                        labOrg = (LabOrganization) org;
+                        break;
+                    }
+                }
+                if (labOrg != null) break;
+            }
+            if (labOrg != null) break;
+        }
+
+        if (labOrg == null || labOrg.getUserAccountDirectory().getUserAccountList().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No Lab Organization or Lab Technician User Accounts found to send the request to.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Assuming we send to the first available Lab Technician
+        UserAccount labTechnicianAccount = labOrg.getUserAccountDirectory().getUserAccountList().get(0);
+
+        // Create the MedicalTestWorkRequest
+        MedicalTestWorkRequest request = new MedicalTestWorkRequest(
+            "Medical Test for Match: " + selectedDonor.getName() + " and " + selectedRecipient.getName(),
+            userAccount, // Sender: Transplant Coordinator
+            labTechnicianAccount, // Receiver: Lab Technician
+            selectedRecipient.getOrganNeeded(), // Test Type (can be more specific if needed)
+            selectedDonor,
+            selectedRecipient
+        );
+        request.setRequestDate(new Date());
+        request.setStatus("Pending Lab Tests");
+
+        // Add to work queue of Transplant Coordinator's organization
+        organization.getWorkQueue().getWorkRequestList().add(request);
+        
+        // Add to work queue of the Lab Organization
+        labOrg.getWorkQueue().getWorkRequestList().add(request);
+
+        // Update Donor/Recipient status
+        selectedDonor.setStatus("Pending Lab Tests");
+        selectedRecipient.setStatus("Pending Lab Tests");
+        
+        JOptionPane.showMessageDialog(this, "Match sent to Lab for testing. Status updated.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        populateRecipientTable(); // Refresh recipient table to show status change
+        populateCompatibleDonorsTable(null); // Clear compatible donors table or refresh
+    }
+
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton btnSendForLabTest;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnFindMatches;
     private javax.swing.JTable compatibleDonorsJTable;

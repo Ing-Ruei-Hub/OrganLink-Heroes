@@ -9,6 +9,8 @@ import Business.Organization.Organization;
 import Business.Recipient.Recipient;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.OrganTransportRequest;
+import Business.WorkQueue.MedicalTestWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.util.List; // To be used if populating table with confirmed matches
 import javax.swing.JOptionPane;
@@ -43,36 +45,18 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) tblConfirmedMatches.getModel();
         model.setRowCount(0);
 
-        // This is a placeholder for getting 'confirmed matches'.
-        // In a real system, this would involve retrieving Recipient objects
-        // that have a status like "Tests Verified" or "Ready for Transport"
-        // and identifying their associated Donor (which would imply a match object or direct link).
-        // For now, let's just populate with recipients that are "Tests Verified"
-        // and assume a dummy donor for demonstration, or that donor is somehow linked.
-        
-        // This logic needs to be robustly implemented based on the actual 'match' tracking
-        
-        for (Network net : system.getNetworkList()) {
-            for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
-                for (Organization org : ent.getOrganizationDirectory().getOrganizationList()) {
-                    if (org instanceof Business.Organization.RecipientOrganization) {
-                        Business.Organization.RecipientOrganization recipientOrg = (Business.Organization.RecipientOrganization) org;
-                        for (Recipient recipient : recipientOrg.getRecipientDirectory().getRecipientList()) {
-                            // Only show recipients that have verified tests and are ready for transport
-                            if (recipient.getStatus().equalsIgnoreCase("Tests Verified")) { // Assuming this means 'ready for transport'
-                                // For demonstration, we need a linked donor. This is complex.
-                                // A proper match object would link Recipient to Donor.
-                                // For simplicity, let's just show recipient for now.
-                                // In a real scenario, you'd iterate through confirmed Match objects.
-                                Object[] row = new Object[4];
-                                row[0] = recipient; // toString of Recipient
-                                row[1] = "Linked Donor Placeholder"; // Placeholder for actual linked donor
-                                row[2] = recipient.getOrganNeeded();
-                                row[3] = recipient.getBloodType();
-                                model.addRow(row);
-                            }
-                        }
-                    }
+        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
+            if (request instanceof MedicalTestWorkRequest) {
+                MedicalTestWorkRequest mRequest = (MedicalTestWorkRequest) request;
+                if (mRequest.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination")) {
+                    Object[] row = new Object[6];
+                    row[0] = mRequest.getDonor(); // Donor object
+                    row[1] = mRequest.getRecipient(); // Recipient object
+                    row[2] = mRequest.getDonor().getOrganToDonate(); // Organ
+                    row[3] = mRequest.getDonor().getBloodType(); // Blood Type (assuming same for recipient for a match)
+                    row[4] = mRequest.getStatus(); // Test Status
+                    row[5] = mRequest; // The request object itself
+                    model.addRow(row);
                 }
             }
         }
@@ -96,17 +80,17 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
 
         tblConfirmedMatches.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Recipient", "Linked Donor", "Organ", "Blood Type"
+                "Donor Name", "Recipient Name", "Organ", "Blood Type", "Test Status", "Request"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -180,17 +164,27 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
             return;
         }
 
-        Recipient selectedRecipient = (Recipient) tblConfirmedMatches.getValueAt(selectedRow, 0);
-        // Assuming a Donor is linked to this recipient in a robust match object.
-        // For now, let's use a dummy donor or assume it's retrieved.
-        Donor selectedDonor = (Donor) tblConfirmedMatches.getValueAt(selectedRow, 1); // Placeholder
+        MedicalTestWorkRequest selectedMedicalTestRequest = (MedicalTestWorkRequest) tblConfirmedMatches.getValueAt(selectedRow, 5); // Assuming request object is at index 5
 
-        if (selectedDonor == null || selectedRecipient == null) {
-            JOptionPane.showMessageDialog(this, "Selected row does not contain valid Donor/Recipient data.", "Data Error", JOptionPane.ERROR_MESSAGE);
+        if (selectedMedicalTestRequest == null) {
+            JOptionPane.showMessageDialog(this, "Selected row does not contain a valid Medical Test Request.", "Data Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (selectedMedicalTestRequest.getStatus().equalsIgnoreCase("Organ Transport Requested")) {
+            JOptionPane.showMessageDialog(this, "Organ transport has already been requested for this match.", "Information", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
-        // Get details from a form/dialog
+        Donor selectedDonor = selectedMedicalTestRequest.getDonor();
+        Recipient selectedRecipient = selectedMedicalTestRequest.getRecipient();
+
+        if (selectedDonor == null || selectedRecipient == null) {
+            JOptionPane.showMessageDialog(this, "Medical Test Request does not contain valid Donor/Recipient data.", "Data Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Get transport details from a form/dialog
         String pickupLocation = JOptionPane.showInputDialog(this, "Enter Pickup Location (Donor Hospital):");
         if (pickupLocation == null || pickupLocation.trim().isEmpty()) { return; }
         String deliveryLocation = JOptionPane.showInputDialog(this, "Enter Delivery Location (Recipient Hospital):");
@@ -199,8 +193,11 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
                             JOptionPane.QUESTION_MESSAGE, null, new String[]{"High", "Medium", "Low"}, "Medium");
         if (urgency == null || urgency.trim().isEmpty()) { return; }
 
-        OrganTransportRequest request = new OrganTransportRequest(selectedDonor, selectedRecipient, pickupLocation, deliveryLocation, urgency);
-        request.setSender(userAccount);
+        OrganTransportRequest organTransportRequest = new OrganTransportRequest(selectedDonor, selectedRecipient, pickupLocation, deliveryLocation, urgency);
+        organTransportRequest.setSender(userAccount);
+        organTransportRequest.setRequestDate(new java.util.Date());
+        organTransportRequest.setStatus("Pending Logistics Assignment");
+
 
         LogisticsOrganization logisticsOrganization = null;
         // Find the Logistics Organization to add the request to
@@ -218,10 +215,18 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
         }
 
         if (logisticsOrganization != null) {
-            logisticsOrganization.getWorkQueue().addWorkRequest(request);
+            logisticsOrganization.getWorkQueue().getWorkRequestList().add(organTransportRequest);
+            // userAccount.getWorkQueue().getWorkRequestList().add(organTransportRequest); // Removed: UserAccount does not have a getWorkQueue()
+
+            // Update MedicalTestWorkRequest status
+            selectedMedicalTestRequest.setStatus("Organ Transport Requested");
+            selectedMedicalTestRequest.setReceiver(logisticsOrganization.getUserAccountDirectory().getUserAccountList().get(0)); // Assign to a logistics user
+
+            // Update Donor and Recipient status
             selectedDonor.setStatus("Organ Transport Requested");
             selectedRecipient.setStatus("Organ Transport Requested");
-            JOptionPane.showMessageDialog(this, "Organ Transport Request submitted successfully to Logistics. Donor/Recipient status updated.", "Request Submitted", JOptionPane.INFORMATION_MESSAGE);
+            
+            JOptionPane.showMessageDialog(this, "Organ Transport Request submitted successfully to Logistics. Statuses updated.", "Request Submitted", JOptionPane.INFORMATION_MESSAGE);
             populateConfirmedMatchesTable(); // Refresh table
         } else {
             JOptionPane.showMessageDialog(this, "Could not find a Logistics Organization to send the request to.", "Error", JOptionPane.ERROR_MESSAGE);

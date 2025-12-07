@@ -58,15 +58,27 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
         for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
             if (request instanceof MedicalTestWorkRequest) {
                 MedicalTestWorkRequest testRequest = (MedicalTestWorkRequest) request;
-                Object[] row = new Object[7];
-                row[0] = testRequest.getSender().getEmployee().getName(); // Lab Technician
-                row[1] = testRequest.getRecipient().getName();
-                row[2] = testRequest.getTestType();
-                row[3] = testRequest.getTestResult();
-                row[4] = testRequest; // The request object itself, for status and actions
-                row[5] = testRequest.getRequestDate() != null ? dateFormat.format(testRequest.getRequestDate()) : "";
-                row[6] = testRequest.getResolveDate() != null ? dateFormat.format(testRequest.getResolveDate()) : "";
-                model.addRow(row);
+                // Filter: Only show requests where this doctor is the receiver
+                if (testRequest.getReceiver() == account) {
+                    Object[] row = new Object[7];
+                    row[0] = testRequest.getSender().getEmployee().getName(); // Lab Technician
+                    
+                    String patientName = "";
+                    if(testRequest.getDonor() != null && testRequest.getRecipient() != null) {
+                        patientName = testRequest.getDonor().getName() + " (D) / " + testRequest.getRecipient().getName() + " (R)";
+                    } else if(testRequest.getDonor() != null) {
+                        patientName = testRequest.getDonor().getName() + " (D)";
+                    } else if (testRequest.getRecipient() != null) {
+                        patientName = testRequest.getRecipient().getName() + " (R)";
+                    }
+                    row[1] = patientName; // Patient Name from Donor or Recipient
+                    row[2] = testRequest.getTestType();
+                    row[3] = testRequest.getTestResult();
+                    row[4] = testRequest; // The request object itself, for status and actions
+                    row[5] = testRequest.getRequestDate() != null ? dateFormat.format(testRequest.getRequestDate()) : "";
+                    row[6] = testRequest.getResolveDate() != null ? dateFormat.format(testRequest.getResolveDate()) : "";
+                    model.addRow(row);
+                }
             }
         }
     }
@@ -223,14 +235,31 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
 
         MedicalTestWorkRequest request = (MedicalTestWorkRequest) tblTestRequests.getValueAt(selectedRow, 4); // Assuming WorkRequest object is at index 4
 
-        if (request.getStatus().equalsIgnoreCase("Completed")) {
-            request.setStatus("Verified by Doctor");
-            request.setResolveDate(new java.util.Date());
-            JOptionPane.showMessageDialog(this, "Medical test result verified successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            populateTestRequestTable();
-        } else {
-            JOptionPane.showMessageDialog(this, "Test result cannot be verified as its status is not 'Completed'.", "Warning", JOptionPane.WARNING_MESSAGE);
+        // Ensure the request is not already processed
+        if (request.getStatus().equalsIgnoreCase("Verified by Doctor") || request.getStatus().equalsIgnoreCase("Retest Required") || request.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination")) {
+            JOptionPane.showMessageDialog(this, "This test request has already been processed or retest was requested.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
+        
+        request.setStatus("Verified by Doctor");
+        request.setResolveDate(new java.util.Date());
+        request.setVerifier(account); // Doctor who verified
+
+        // Assign the request back to the original sender (Transplant Coordinator)
+        UserAccount originalSender = request.getSender();
+        request.setReceiver(originalSender);
+        request.setStatus("Verified, Ready for Transport Coordination"); // New status for TC
+
+        // Update Donor and Recipient status
+        if (request.getDonor() != null) {
+            request.getDonor().setStatus("Verified, Ready for Transport Coordination");
+        }
+        if (request.getRecipient() != null) {
+            request.getRecipient().setStatus("Verified, Ready for Transport Coordination");
+        }
+
+        JOptionPane.showMessageDialog(this, "Medical test result verified and sent to Transplant Coordinator!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        populateTestRequestTable();
     }//GEN-LAST:event_btnVerifyActionPerformed
 
     private void btnRequestRetestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestRetestActionPerformed
@@ -245,7 +274,7 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
         if (request.getStatus().equalsIgnoreCase("Completed") || request.getStatus().equalsIgnoreCase("Pending Doctor Verification")) {
             String retestReason = JOptionPane.showInputDialog(this, "Enter reason for retest:");
             if (retestReason != null && !retestReason.trim().isEmpty()) {
-                request.setStatus("Retest Requested by Doctor");
+                request.setStatus("Retest Required");
                 request.setMessage("Retest requested: " + retestReason); // Update message with retest reason
                 request.setReceiver(findLabTechnician()); // Assign back to a Lab Technician
                 request.setResolveDate(null); // Clear resolve date
