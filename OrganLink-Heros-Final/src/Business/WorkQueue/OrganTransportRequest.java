@@ -2,33 +2,26 @@ package Business.WorkQueue;
 
 import Business.Donor.Donor;
 import Business.Recipient.Recipient;
-import Business.UserAccount.UserAccount;
 import java.util.Date;
 
-// Assuming TransportVehicle and LogisticsTeam classes will be created later
 public class OrganTransportRequest extends WorkRequest {
-
+    
     private Donor donor;
     private Recipient recipient;
     private String pickupLocation;
     private String deliveryLocation;
-    private String urgency; // e.g., "Critical", "Urgent", "Standard"
-    private String assignedVehicle; // ID or name of assigned vehicle
-    private String assignedTeam;    // ID or name of assigned team
+    private String urgency; // e.g., "High", "Medium", "Low"
+    private String assignedVehicle; // ID or name of the assigned vehicle
+    private String assignedTeam;    // Name of the assigned logistics team
 
-    public OrganTransportRequest(String message, UserAccount sender, UserAccount receiver,
-                                 Donor donor, Recipient recipient,
-                                 String pickupLocation, String deliveryLocation, String urgency) {
-        super();
-        setMessage(message);
-        setSender(sender);
-        setReceiver(receiver);
-        setStatus("Pending Logistics Assignment"); // Initial status
+    public OrganTransportRequest(Donor donor, Recipient recipient, String pickupLocation, String deliveryLocation, String urgency) {
+        super(); // Call constructor of WorkRequest
         this.donor = donor;
         this.recipient = recipient;
         this.pickupLocation = pickupLocation;
         this.deliveryLocation = deliveryLocation;
         this.urgency = urgency;
+        this.setStatus("Pending Logistics Assignment"); // Initial status
     }
 
     // Getters and Setters
@@ -90,8 +83,6 @@ public class OrganTransportRequest extends WorkRequest {
 
     @Override
     public String toString() {
-        String donorName = donor != null ? donor.getName() : "N/A";
-        String recipientName = recipient != null ? recipient.getName() : "N/A";
-        return "Transport: " + donorName + " -> " + recipientName + " (" + urgency + ") - " + getStatus();
+        return "Organ Transport Request for " + donor.getName() + " -> " + recipient.getName() + " (Status: " + getStatus() + ")";
     }
 }
