@@ -7,6 +7,7 @@ package userinterface.DonorRole;
 import Business.Donor.Donor;
 import Business.Organization.Organization;
 import Business.Enterprise.Enterprise;
+import Business.Organization.DonorOrganization;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.DonorRegistrationRequest;
 import java.text.ParseException;
@@ -26,19 +27,22 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
     private UserAccount userAccount;
     private Organization organization;
     private Enterprise enterprise;
+    private DonorWorkAreaJPanel workAreaPanel;
+    private DonorOrganization donorOrganization;
     /**
      * Creates new form DonorRegistrationJPanel
      */
-    public DonorRegistrationJPanel(JPanel userProcessContainer, UserAccount account, Organization org, Enterprise ent) {
-        
+    public DonorRegistrationJPanel(JPanel userProcessContainer, UserAccount account, 
+        DonorOrganization org, Enterprise ent, DonorWorkAreaJPanel workAreaPanel) {
+    
         initComponents();
-        
+    
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
-        this.organization = org;
+        this.donorOrganization = org;  // 改变量名
         this.enterprise = ent;
-        
-         // 初始化數據
+        this.workAreaPanel = workAreaPanel;  // 新增
+    
         populateComboBoxes();
         setupRadioButtonGroups();  
     }
@@ -543,7 +547,7 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
             donor.setStatus("Pending Hospital Review");
             
             // 保存到系統
-            organization.getDonorDirectory().addDonor(donor);
+            donorOrganization.getDonorDirectory().addDonor(donor);
             
             // ============ 创建 WorkRequest 并添加到 WorkQueue ============
 
@@ -556,14 +560,14 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
            request.setMessage("Donor registration request from " + donor.getName());
 
            // 添加到 WorkQueue
-           organization.getWorkQueue().addWorkRequest(request);
+           donorOrganization.getWorkQueue().addWorkRequest(request);
            // ============ 调试信息 ============
 System.out.println("=== DONOR SUBMISSION DEBUG ===");
-System.out.println("Donor Organization: " + organization.getName());
-System.out.println("Organization ID: " + organization.getOrganizationID());
+System.out.println("Donor Organization: " + donorOrganization.getName());
+System.out.println("Organization ID: " + donorOrganization.getOrganizationID());
 System.out.println("Request ID: " + request.getRequestID());
 System.out.println("Donor Name: " + request.getDonorName());
-System.out.println("WorkQueue Size: " + organization.getWorkQueue().getWorkRequestList().size());
+System.out.println("WorkQueue Size: " + donorOrganization.getWorkQueue().getWorkRequestList().size());
 System.out.println("=============================");
 // ============ End ============
             

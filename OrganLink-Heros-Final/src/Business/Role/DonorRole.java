@@ -17,7 +17,7 @@ import userinterface.DonorRole.DonorWorkAreaJPanel;
 public class DonorRole extends Role{
 
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, Network network, EcoSystem business) {
-        return new DonorWorkAreaJPanel(userProcessContainer, account, organization, enterprise);
+        return new DonorWorkAreaJPanel(userProcessContainer, account, (DonorOrganization) organization, enterprise);
     }
     
     @Override
