@@ -23,6 +23,7 @@ public class LogisticsRole extends Role{
                 (LogisticsOrganization) organization, enterprise, business);
     }
     
+    
     @Override
     public String toString() {
         return RoleType.Logistics.getValue();
