@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 /**
  *
@@ -95,6 +96,25 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
         group3.add(btnYesQ4);
         group3.add(btnNoQ3);
     }
+    
+    /**
+     * Calculate age from date of birth
+     */
+    private int calculateAge(Date dateOfBirth) {
+        Calendar dob = Calendar.getInstance();
+        dob.setTime(dateOfBirth);
+        Calendar today = Calendar.getInstance();
+    
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+    
+        // Adjust if birthday hasn't occurred yet this year
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+    
+        return age;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -217,6 +237,9 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel11.setText("Organ Type:");
 
+        txtAge.setEditable(false);
+        txtAge.setEnabled(false);
+
         jLabel4.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel4.setText("Donor Aplication:");
 
@@ -254,6 +277,12 @@ public class DonorRegistrationJPanel extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel6.setText("DOB:");
+
+        txtDOB.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDOBFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -621,54 +650,53 @@ System.out.println("=============================");
            return false;
         }
         
-        // 驗證出生日期格式
+        // Validate DOB format and value
         if (txtDOB.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Please enter your date of birth!\nFormat: YYYY-MM-DD (e.g., 1990-12-25)", 
+            JOptionPane.showMessageDialog(this, "Please enter your date of birth!", 
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+    
+        Date dobDate = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            sdf.setLenient(false);
+            dobDate = sdf.parse(txtDOB.getText().trim());
         
-        Date dob = parseDateOfBirth(txtDOB.getText().trim());
-        if (dob == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Invalid date format!\nPlease use: YYYY-MM-DD\nExample: 1990-12-25", 
-                "Date Format Error", 
-                JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        // 驗證出生日期不能是未來日期
-        if (dob.after(new Date())) {
-            JOptionPane.showMessageDialog(this, "Date of birth cannot be in the future!", 
+            // Check if date is in the future
+            if (dobDate.after(new Date())) {
+                JOptionPane.showMessageDialog(this, "Date of birth cannot be in the future!", 
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Invalid date format! Please use MM/DD/YYYY", 
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
-        // 驗證年齡
+    
+        // Validate age (auto-calculated from DOB)
         if (txtAge.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter your age!", 
+            JOptionPane.showMessageDialog(this, "Please enter a valid date of birth to calculate age!", 
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+    
         try {
             int age = Integer.parseInt(txtAge.getText().trim());
             if (age < 18 || age > 75) {
                 JOptionPane.showMessageDialog(this, 
-                    "Age must be between 18 and 75!", 
-                    "Validation Error", 
-                    JOptionPane.WARNING_MESSAGE);
+                    "Donors must be between 18 and 75 years old!", 
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, 
-                "Please enter a valid number for age!", 
-                "Input Error", 
-                JOptionPane.ERROR_MESSAGE);
+                "Invalid age value!", 
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+    
         // 驗證 Email
         if (txtEmails.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter your email!", 
@@ -684,9 +712,16 @@ System.out.println("=============================");
             return false;
         }
         
-        // 驗證電話號碼
+        // Validate phone number - must be exactly 10 digits
         if (txtPhoneNumber.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter your phone number!", 
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+    
+        String phoneDigits = txtPhoneNumber.getText().trim().replaceAll("[^0-9]", "");
+        if (phoneDigits.length() != 10) {
+            JOptionPane.showMessageDialog(this, "Phone number must be exactly 10 digits!", 
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
@@ -744,6 +779,20 @@ System.out.println("=============================");
         
         if (txtZipCode.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter your zip code!", 
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        // Validate zip code - must be exactly 5 digits
+        if (txtZipCode.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter your zip code!", 
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+    
+        String zipDigits = txtZipCode.getText().trim().replaceAll("[^0-9]", "");
+        if (zipDigits.length() != 5) {
+            JOptionPane.showMessageDialog(this, "Zip code must be exactly 5 digits!", 
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
@@ -875,6 +924,29 @@ System.out.println("=============================");
     private void btnNoQ1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoQ1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNoQ1ActionPerformed
+
+    private void txtDOBFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDOBFocusLost
+        // TODO add your handling code here:
+        // Auto-calculate age when user finishes entering DOB
+        String dobText = txtDOB.getText().trim();
+        if (!dobText.isEmpty()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                sdf.setLenient(false);
+                Date dob = sdf.parse(dobText);
+                int age = calculateAge(dob);
+                if (age >= 0 && age <= 120) {
+                    txtAge.setText(String.valueOf(age));
+                } else {
+                    txtAge.setText("");
+                }
+            } catch (ParseException e) {
+                txtAge.setText("");
+            }
+        } else {
+            txtAge.setText("");
+        }
+    }//GEN-LAST:event_txtDOBFocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
