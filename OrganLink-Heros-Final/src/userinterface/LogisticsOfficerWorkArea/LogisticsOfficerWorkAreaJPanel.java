@@ -65,10 +65,11 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
                         if (request instanceof OrganTransportRequest) {
                             OrganTransportRequest transportRequest = (OrganTransportRequest) request;
                             
-                            // Show requests that are pending or in transit
+                            // Show all logistics-related requests (including delivered)
                             String status = transportRequest.getStatus();
                             if (status.equals("Pending Logistics Assignment") || 
-                                status.equals("Assigned, In Transit")) {
+                                status.equals("Assigned, In Transit") ||
+                                status.equals("Delivered")) {
                                 
                                 String donorName = transportRequest.getDonor() != null ? 
                                         transportRequest.getDonor().getName() : "N/A";
@@ -328,6 +329,12 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         
+        if (request.getStatus().equals("Delivered")) {
+            JOptionPane.showMessageDialog(this, "This request has already been delivered. No further changes allowed.", 
+                    "Already Delivered", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         int vehicleIndex = cmbVehicles.getSelectedIndex();
         int teamIndex = cmbTeams.getSelectedIndex();
         TransportVehicle selectedVehicle = vehicleList.get(vehicleIndex);
@@ -418,6 +425,12 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
                     "Invalid Status", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        if (request.getStatus().equals("Delivered")) {
+            JOptionPane.showMessageDialog(this, "This request has already been delivered. No further changes allowed.", 
+                    "Already Delivered", JOptionPane.WARNING_MESSAGE);
+            return;
+        }   
         
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Mark this transport as delivered?\n" +
