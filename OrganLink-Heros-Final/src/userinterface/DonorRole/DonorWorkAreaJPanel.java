@@ -4,11 +4,14 @@
  */
 package userinterface.DonorRole;
 
+import Business.Donor.Donor;
 import Business.Enterprise.Enterprise;
+import Business.Organization.DonorOrganization;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,18 +23,40 @@ public class DonorWorkAreaJPanel extends javax.swing.JPanel {
     private UserAccount userAccount;
     private Organization organization;
     private Enterprise enterprise;
+    private DonorOrganization donorOrganization;
     /**
      * Creates new form DonorWorkAreaJPanel
      */
-    public DonorWorkAreaJPanel(JPanel userProcessContainer, UserAccount account, Organization org, Enterprise ent) {
-        initComponents();
-        
-        this.userProcessContainer = userProcessContainer;
-        this.userAccount = account;
-        this.organization = org;
-        this.enterprise = ent;
-        
+    public DonorWorkAreaJPanel(JPanel userProcessContainer, UserAccount account, 
+        DonorOrganization organization, Enterprise enterprise) {
+    initComponents();
+    
+    this.userProcessContainer = userProcessContainer;
+    this.userAccount = account;
+    this.donorOrganization = organization;
+    this.enterprise = enterprise;
+    
+    populateTable();
+}
+    /**
+     * Populate the table with all donors from the organization's directory
+     */
+    public void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tblMyDonations.getModel();
+        model.setRowCount(0); // Clear existing rows
+    
+        // Load all donors from the organization's directory
+        for (Donor donor : donorOrganization.getDonorDirectory().getDonorList()) {
+            Object[] row = new Object[6];
+            row[0] = donor.getDonorId();
+            row[1] = donor.getName();
+            row[2] = donor.getOrganToDonate();
+            row[3] = donor.getBloodType();
+            row[4] = donor.getStatus();
+            model.addRow(row);
+        }
     }
+    
     
 
     /**
@@ -44,6 +69,10 @@ public class DonorWorkAreaJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         btnRegister = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMyDonations = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.GridBagLayout());
@@ -74,21 +103,31 @@ public class DonorWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        // TODO add your handling code here:
-    DonorRegistrationJPanel registrationPanel = new DonorRegistrationJPanel(
-        userProcessContainer,
-        userAccount,
-        organization,
-        enterprise
-    );
+        // Pass 'this' so registration panel can refresh the table on return
+        DonorRegistrationJPanel registrationPanel = new DonorRegistrationJPanel(
+            userProcessContainer,
+            userAccount,
+            donorOrganization,
+            enterprise,
+            this
+        );
     
-    userProcessContainer.add("DonorRegistration", registrationPanel);
-    CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-    layout.next(userProcessContainer);
+        userProcessContainer.add("DonorRegistration", registrationPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        populateTable();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnRegister;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblMyDonations;
     // End of variables declaration//GEN-END:variables
 }

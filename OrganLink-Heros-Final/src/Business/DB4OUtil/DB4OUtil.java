@@ -2,7 +2,14 @@
 package Business.DB4OUtil;
 
 import Business.ConfigureASystem;
+import Business.Donor.Donor;
 import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.DonorOrganization;
+import Business.Organization.Organization;
+import Business.Organization.RecipientOrganization;
+import Business.Recipient.Recipient;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
@@ -71,9 +78,45 @@ public class DB4OUtil {
             system = systems.get(systems.size() - 1);
         }
         conn.close();
+        
+        // ========== SYNC ALL COUNTERS ==========
+        syncAllCounters(system);
+        
         return system;
     }
 
+    /**
+     * Synchronize all static counters after loading from database.
+     * This ensures new IDs don't conflict with existing ones.
+     */
+    private void syncAllCounters(EcoSystem system) {
+        for (Network network : system.getNetworkList()) {
+            for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                    
+                    // Sync Recipient counter
+                    if (organization instanceof RecipientOrganization) {
+                        RecipientOrganization recOrg = (RecipientOrganization) organization;
+                        for (Recipient recipient : recOrg.getRecipientDirectory().getRecipientList()) {
+                            Recipient.syncCounter(recipient.getRecipientId());
+                        }
+                    }
+                    
+                    // Sync Donor counter
+                    if (organization instanceof DonorOrganization) {
+                        DonorOrganization donorOrg = (DonorOrganization) organization;
+                        for (Donor donor : donorOrg.getDonorDirectory().getDonorList()) {
+                            Donor.syncCounter(donor.getDonorId());
+                        }
+                    }
+                }
+            }
+        }
+        
+        System.out.println("DEBUG: Counters synced. Recipient counter = " + Recipient.getCounter() + ", Donor counter = " + Donor.getCounter());
+    }
+    
+    
     public void deleteDatabaseFile() {
         try {
             java.nio.file.Files.deleteIfExists(java.nio.file.Paths.get(FILENAME));

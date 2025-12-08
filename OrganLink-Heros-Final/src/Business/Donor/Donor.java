@@ -28,6 +28,31 @@ public class Donor {
         this.medicalTestResultList = new ArrayList<>(); // Initialize the list
     }
 
+    /**
+ * Synchronize the counter based on existing Donor IDs.
+ * Call this method after loading data from database.
+ * @param existingId the existing donor ID (e.g., "DON5")
+ */
+public static void syncCounter(String existingId) {
+    if (existingId != null && existingId.startsWith("DON")) {
+        try {
+            int idNumber = Integer.parseInt(existingId.substring(3));
+            if (idNumber >= counter) {
+                counter = idNumber + 1;
+            }
+        } catch (NumberFormatException e) {
+            // Ignore invalid ID format
+        }
+    }
+}
+
+/**
+ * Get current counter value (for debugging)
+ */
+public static int getCounter() {
+    return counter;
+}
+    
     public String getName() {
         return name;
     }
