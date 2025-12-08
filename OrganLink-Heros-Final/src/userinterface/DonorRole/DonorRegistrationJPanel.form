@@ -502,6 +502,10 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtAge">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="ComboBoxStates">
       <Properties>
@@ -615,6 +619,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtDOB">
+      <Events>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtDOBFocusLost"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
