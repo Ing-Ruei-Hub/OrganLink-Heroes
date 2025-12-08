@@ -432,6 +432,7 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }   
         
+        
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Mark this transport as delivered?\n" +
                 "Donor: " + request.getDonor().getName() + "\n" +
