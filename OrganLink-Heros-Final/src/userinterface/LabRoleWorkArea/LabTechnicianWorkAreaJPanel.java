@@ -90,15 +90,38 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
         tblSubjects = new javax.swing.JTable();
         btnUploadResults = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setText("Lab Technician Work Area");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
 
         lblEnterprise.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblEnterprise.setText("Enterprise:");
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(lblEnterprise, gbc);
 
         lblEnterpriseValue.setText("<value>");
+        gbc.gridx = 1;
+        add(lblEnterpriseValue, gbc);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Subjects Requiring Tests:");
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(20, 10, 5, 10);
+        add(jLabel2, gbc);
+        
         tblSubjects.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -119,54 +142,25 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
             }
         });
         jScrollPane1.setViewportView(tblSubjects);
+        
+        gbc.gridy = 3;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(jScrollPane1, gbc);
 
         btnUploadResults.setText("Upload Test Results");
+        btnUploadResults.setBackground(new java.awt.Color(0, 120, 102));
+        btnUploadResults.setForeground(java.awt.Color.WHITE);
         btnUploadResults.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUploadResultsActionPerformed(evt);
             }
         });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Subjects Requiring Tests:");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblEnterprise)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lblEnterpriseValue, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(btnUploadResults, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(103, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEnterprise)
-                    .addComponent(lblEnterpriseValue))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnUploadResults)
-                .addContainerGap(176, Short.MAX_VALUE))
-        );
+        gbc.gridy = 4;
+        gbc.fill = java.awt.GridBagConstraints.NONE;
+        gbc.weighty = 0;
+        add(btnUploadResults, gbc);
     }// </editor-fold>                        
 
     private void btnUploadResultsActionPerformed(java.awt.event.ActionEvent evt) {                                                 

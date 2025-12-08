@@ -172,6 +172,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
+        this.setBackground(new java.awt.Color(255, 255, 255));
         recipientJTable = new javax.swing.JTable();
         btnFindMatches = new javax.swing.JButton();
         btnSendMatchForDoctorVerification = new javax.swing.JButton();
@@ -182,6 +183,27 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblCompatibleDonors = new javax.swing.JLabel();
+
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel1.setText("Manage Recipient Requests & Matches");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3; // Changed from 4 to 3
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // Bold, size 16
+        jLabel2.setForeground(new java.awt.Color(51, 51, 51)); // Dark grey
+        jLabel2.setText("Recipient Requests:");
+        gbc.gridy = 1;
+        gbc.gridwidth = 3; // Changed from 4 to 3
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.insets = new java.awt.Insets(10, 10, 5, 10);
+        add(jLabel2, gbc);
 
         recipientJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -203,35 +225,71 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             }
         });
         jScrollPane1.setViewportView(recipientJTable);
+        
+        gbc.gridy = 2;
+        gbc.gridwidth = 3; // Changed from 4 to 3
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(0, 10, 10, 10);
+        add(jScrollPane1, gbc);
+
+        // Buttons for recipient actions
+        gbc.gridy = 3;
+        gbc.gridx = 0; // Start at column 0
+        gbc.gridwidth = 1; // Each button takes 1 column
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Make buttons fill their horizontal space
+        gbc.anchor = java.awt.GridBagConstraints.CENTER; // Center buttons horizontally
+        gbc.weightx = 1.0; // Allow buttons to expand
+        gbc.insets = new java.awt.Insets(10, 10, 10, 5); // Add some right padding
 
         btnFindMatches.setText("Find Initial Matches");
+        btnFindMatches.setBackground(new java.awt.Color(0, 120, 102)); // Primary accent teal
+        btnFindMatches.setForeground(new java.awt.Color(255, 255, 255)); // White text
+        // btnFindMatches.setPreferredSize(new java.awt.Dimension(200, 40)); // Removed preferredSize
         btnFindMatches.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFindMatchesActionPerformed(evt);
             }
         });
+        add(btnFindMatches, gbc);
 
-        btnBack.setText("<< Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
-
+        gbc.gridx = 1; // Move to next column
+        gbc.insets = new java.awt.Insets(10, 5, 10, 5); // Equal padding
         btnSendMatchForDoctorVerification.setText("Send Match for Doctor Verification");
+        btnSendMatchForDoctorVerification.setBackground(new java.awt.Color(0, 120, 102)); // Primary accent teal
+        btnSendMatchForDoctorVerification.setForeground(new java.awt.Color(255, 255, 255)); // White text
+        // btnSendMatchForDoctorVerification.setPreferredSize(new java.awt.Dimension(220, 40)); // Removed preferredSize
         btnSendMatchForDoctorVerification.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendMatchForDoctorVerificationActionPerformed(evt);
             }
         });
         btnSendMatchForDoctorVerification.setEnabled(false); // Initially disabled
+        add(btnSendMatchForDoctorVerification, gbc);
 
+        gbc.gridx = 2; // Move to next column
+        gbc.insets = new java.awt.Insets(10, 5, 10, 10); // Add some left padding
         btnRequestInternationalSearch.setText("Request International Search");
+        btnRequestInternationalSearch.setBackground(new java.awt.Color(0, 120, 102)); // Primary accent teal
+        btnRequestInternationalSearch.setForeground(new java.awt.Color(255, 255, 255)); // White text
+        // btnRequestInternationalSearch.setPreferredSize(new java.awt.Dimension(220, 40)); // Removed preferredSize
         btnRequestInternationalSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRequestInternationalSearchActionPerformed(evt);
             }
         });
+        add(btnRequestInternationalSearch, gbc);
+        
+        lblCompatibleDonors.setFont(new java.awt.Font("Tahoma", 1, 16)); // Bold, size 16
+        lblCompatibleDonors.setForeground(new java.awt.Color(51, 51, 51)); // Dark grey
+        lblCompatibleDonors.setText("Compatible Donors:");
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3; // Changed from 4 to 3
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.insets = new java.awt.Insets(20, 10, 5, 10);
+        add(lblCompatibleDonors, gbc);
 
         compatibleDonorsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -253,63 +311,30 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             }
         });
         jScrollPane2.setViewportView(compatibleDonorsJTable);
+        
+        gbc.gridy = 5;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3; // Changed from 4 to 3
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(0, 10, 10, 10);
+        add(jScrollPane2, gbc);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Manage Recipient Requests & Matches");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Recipient List:");
-
-        lblCompatibleDonors.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblCompatibleDonors.setText("Compatible Donors:");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblCompatibleDonors)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(150, 150, 150)
-                                            .addComponent(btnFindMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnSendMatchForDoctorVerification, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnRequestInternationalSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))                            .addComponent(jScrollPane2))))
-                .addContainerGap(114, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(btnBack)
-                .addGap(25, 25, 25)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFindMatches)
-                    .addComponent(btnSendMatchForDoctorVerification)
-                    .addComponent(btnRequestInternationalSearch))
-                .addGap(28, 28, 28)
-                .addComponent(lblCompatibleDonors)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
-        );
+        btnBack.setText("<< Back");
+        btnBack.setBackground(new java.awt.Color(153, 153, 153)); // Neutral grey
+        btnBack.setForeground(new java.awt.Color(255, 255, 255)); // White text
+        btnBack.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        gbc.gridy = 6;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        add(btnBack, gbc);
     }// </editor-fold>                        
 
     private void btnFindMatchesActionPerformed(java.awt.event.ActionEvent evt) {                                               

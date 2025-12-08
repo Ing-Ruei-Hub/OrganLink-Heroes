@@ -114,7 +114,7 @@ public class ConfigureASystem {
                             // Generate and add some donors
                             for (int d = 0; d < 10; d++) { // Create 3 donors
                                 Donor donor = new Donor(faker.name().fullName());
-                                donor.setBloodType(faker.options().option("A-", "B-"));
+                                donor.setBloodType(faker.options().option("A-", "A+","B-","B+"));
                                 donor.setOrganToDonate(faker.options().option("Kidney"));
                                 donor.setDateOfBirth(faker.date().birthday());
                                 donor.setContactNumber(faker.phoneNumber().phoneNumber());

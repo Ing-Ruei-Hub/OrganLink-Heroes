@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 
 /**
- *
+ * 
  * @author eric
  */
 public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
@@ -153,8 +153,18 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
         lblRouteInfo = new javax.swing.JLabel();
         lblAssignedInfo = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setText("Logistics Officer Work Area");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
 
         tblTransportRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -176,125 +186,66 @@ public class LogisticsOfficerWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblTransportRequests);
+        
+        gbc.gridy = 1;
+        gbc.gridwidth = 4;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jScrollPane1, gbc);
 
-        jLabel2.setText("Select Vehicle:");
-
-        cmbVehicles.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel3.setText("Select Team:");
-
-        cmbTeams.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
+        JPanel selectionPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
+        selectionPanel.add(new javax.swing.JLabel("Select Vehicle:"));
+        selectionPanel.add(cmbVehicles);
+        selectionPanel.add(new javax.swing.JLabel("Select Team:"));
+        selectionPanel.add(cmbTeams);
+        
+        gbc.gridy = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.weighty = 0;
+        add(selectionPanel, gbc);
+        
+        JPanel buttonPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
         btnViewDetails.setText("View Details");
-        btnViewDetails.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewDetailsActionPerformed(evt);
-            }
-        });
-
+        btnViewDetails.addActionListener(this::btnViewDetailsActionPerformed);
+        buttonPanel.add(btnViewDetails);
+        
         btnAssign.setText("Assign Resources");
-        btnAssign.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAssignActionPerformed(evt);
-            }
-        });
+        btnAssign.setBackground(new java.awt.Color(0, 120, 102));
+        btnAssign.setForeground(java.awt.Color.WHITE);
+        btnAssign.addActionListener(this::btnAssignActionPerformed);
+        buttonPanel.add(btnAssign);
 
         btnMarkDelivered.setText("Mark as Delivered");
-        btnMarkDelivered.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMarkDeliveredActionPerformed(evt);
-            }
-        });
-
+        btnMarkDelivered.addActionListener(this::btnMarkDeliveredActionPerformed);
+        buttonPanel.add(btnMarkDelivered);
+        
         btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        buttonPanel.add(btnRefresh);
 
-        pnlDetails.setBackground(new java.awt.Color(204, 255, 255));
-        pnlDetails.setLayout(new java.awt.GridLayout(5, 1));
+        gbc.gridy = 3;
+        add(buttonPanel, gbc);
+        
+        pnlDetails.setBackground(new java.awt.Color(240, 240, 240));
+        pnlDetails.setLayout(new java.awt.GridLayout(5, 1, 5, 5));
+        pnlDetails.setBorder(javax.swing.BorderFactory.createTitledBorder("Details"));
 
         lblDetailsTitle.setText("Select a request to view details");
-        lblDetailsTitle.setToolTipText("");
         pnlDetails.add(lblDetailsTitle);
-
         lblDonorInfo.setText("Donor: ");
         pnlDetails.add(lblDonorInfo);
-
         lblRecipientInfo.setText("Recipient: ");
         pnlDetails.add(lblRecipientInfo);
-
         lblRouteInfo.setText("Route: ");
         pnlDetails.add(lblRouteInfo);
-
         lblAssignedInfo.setText("Assigned: ");
         pnlDetails.add(lblAssignedInfo);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 721, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnViewDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAssign, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(cmbTeams, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(btnMarkDelivered, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(269, 269, 269)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(pnlDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 648, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(123, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(cmbTeams, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnViewDetails)
-                    .addComponent(btnAssign)
-                    .addComponent(btnMarkDelivered)
-                    .addComponent(btnRefresh))
-                .addGap(39, 39, 39)
-                .addComponent(pnlDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
-        );
+        
+        gbc.gridy = 4;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(pnlDetails, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignActionPerformed

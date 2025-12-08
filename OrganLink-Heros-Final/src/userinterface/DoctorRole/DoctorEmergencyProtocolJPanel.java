@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 /**
- *
+ * 
  * @author jim.hsieh
  */
 public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
@@ -102,45 +102,43 @@ public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
 
         jPanel1 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRecipients = new javax.swing.JTable();
+        btnActivateForRecipient = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDonors = new javax.swing.JTable();
-        btnActivateForRecipient = new javax.swing.JButton();
         btnActivateForDonor = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(0, 153, 153));
-        setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
-
-        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
-
-        lblTitle.setFont(new java.awt.Font("Arial", 1, 28));
-        lblTitle.setForeground(new java.awt.Color(204, 255, 204));
-        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(0, 102, 102));
         lblTitle.setText("Emergency Protocol Activation");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(lblTitle, gbc);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lblTitle)
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 18));
-        jLabel1.setForeground(new java.awt.Color(204, 255, 204));
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jSplitPane1.setDividerLocation(600);
+        
+        jPanel2 = new javax.swing.JPanel();
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+        
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
         jLabel1.setText("Recipients:");
-
+        jPanel2.add(jLabel1, java.awt.BorderLayout.NORTH);
+        
         tblRecipients.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -158,11 +156,29 @@ public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
             }
         });
         jScrollPane1.setViewportView(tblRecipients);
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 18));
-        jLabel2.setForeground(new java.awt.Color(204, 255, 204));
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        
+        btnActivateForRecipient.setBackground(new java.awt.Color(204, 0, 0));
+        btnActivateForRecipient.setFont(new java.awt.Font("Tahoma", 1, 14));
+        btnActivateForRecipient.setForeground(new java.awt.Color(255, 255, 255));
+        btnActivateForRecipient.setText("Activate Emergency for Selected Recipient");
+        btnActivateForRecipient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActivateForRecipientActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnActivateForRecipient, java.awt.BorderLayout.SOUTH);
+        
+        jSplitPane1.setLeftComponent(jPanel2);
+        
+        jPanel3 = new javax.swing.JPanel();
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+        
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18));
         jLabel2.setText("Donors:");
-
+        jPanel3.add(jLabel2, java.awt.BorderLayout.NORTH);
+        
         tblDonors.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -180,19 +196,10 @@ public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
             }
         });
         jScrollPane2.setViewportView(tblDonors);
-
-        btnActivateForRecipient.setBackground(new java.awt.Color(204, 0, 0));
-        btnActivateForRecipient.setFont(new java.awt.Font("Arial", 1, 16));
-        btnActivateForRecipient.setForeground(new java.awt.Color(255, 255, 255));
-        btnActivateForRecipient.setText("Activate Emergency for Selected Recipient");
-        btnActivateForRecipient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActivateForRecipientActionPerformed(evt);
-            }
-        });
-
+        jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        
         btnActivateForDonor.setBackground(new java.awt.Color(204, 0, 0));
-        btnActivateForDonor.setFont(new java.awt.Font("Arial", 1, 16));
+        btnActivateForDonor.setFont(new java.awt.Font("Tahoma", 1, 14));
         btnActivateForDonor.setForeground(new java.awt.Color(255, 255, 255));
         btnActivateForDonor.setText("Activate Emergency for Selected Donor");
         btnActivateForDonor.addActionListener(new java.awt.event.ActionListener() {
@@ -200,59 +207,29 @@ public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
                 btnActivateForDonorActionPerformed(evt);
             }
         });
+        jPanel3.add(btnActivateForDonor, java.awt.BorderLayout.SOUTH);
+        
+        jSplitPane1.setRightComponent(jPanel3);
+        
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(jSplitPane1, gbc);
 
-        btnBack.setBackground(new java.awt.Color(0, 102, 102));
-        btnBack.setFont(new java.awt.Font("Arial", 1, 14));
-        btnBack.setForeground(new java.awt.Color(204, 255, 204));
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                    .addComponent(btnActivateForRecipient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                    .addComponent(btnActivateForDonor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnActivateForRecipient, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnActivateForDonor, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        add(btnBack, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActivateForRecipientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivateForRecipientActionPerformed
@@ -442,5 +419,8 @@ public class DoctorEmergencyProtocolJPanel extends javax.swing.JPanel{
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tblDonors;
     private javax.swing.JTable tblRecipients;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables}
 }

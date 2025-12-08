@@ -78,6 +78,27 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel1.setText("Manage Organ Transport Requests");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Confirmed Matches (Ready for Transport):");
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.insets = new java.awt.Insets(10, 10, 5, 10);
+        add(jLabel2, gbc);
+
         tblConfirmedMatches.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -98,13 +119,29 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
             }
         });
         jScrollPane1.setViewportView(tblConfirmedMatches);
+        
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(0, 10, 10, 10);
+        add(jScrollPane1, gbc);
 
         btnRequestTransport.setText("Request Organ Transport");
+        btnRequestTransport.setBackground(new java.awt.Color(0, 120, 102));
+        btnRequestTransport.setForeground(java.awt.Color.WHITE);
+        btnRequestTransport.setPreferredSize(new java.awt.Dimension(220, 40));
         btnRequestTransport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRequestTransportActionPerformed(evt);
             }
         });
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(btnRequestTransport, gbc);
 
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -112,49 +149,12 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
                 btnBackActionPerformed(evt);
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Manage Organ Transport Requests");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Confirmed Matches (Ready for Transport):");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(238, 238, 238)
-                        .addComponent(btnRequestTransport)))
-                .addContainerGap(103, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(btnBack)
-                .addGap(25, 25, 25)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(btnRequestTransport)
-                .addContainerGap(222, Short.MAX_VALUE))
-        );
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gbc.weighty = 1.0;
+        add(btnBack, gbc);
     }// </editor-fold>                        
 
     private void btnRequestTransportActionPerformed(java.awt.event.ActionEvent evt) {                                                    

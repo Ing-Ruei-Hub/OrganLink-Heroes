@@ -63,6 +63,7 @@ public class GovernmentOfficialEmergencyReviewJPanel extends javax.swing.JPanel{
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -74,30 +75,18 @@ public class GovernmentOfficialEmergencyReviewJPanel extends javax.swing.JPanel{
         btnRefresh = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(0, 153, 153));
-        setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
-
-        lblTitle.setFont(new java.awt.Font("Arial", 1, 28));
-        lblTitle.setForeground(new java.awt.Color(204, 255, 204));
-        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(0, 102, 102));
         lblTitle.setText("Emergency Protocol Review");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lblTitle)
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(lblTitle, gbc);
 
         tblEmergencyProtocols.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,80 +105,47 @@ public class GovernmentOfficialEmergencyReviewJPanel extends javax.swing.JPanel{
             }
         });
         jScrollPane1.setViewportView(tblEmergencyProtocols);
+        
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 4;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jScrollPane1, gbc);
 
-        btnApprove.setBackground(new java.awt.Color(0, 153, 0));
-        btnApprove.setFont(new java.awt.Font("Arial", 1, 16));
-        btnApprove.setForeground(new java.awt.Color(255, 255, 255));
+        JPanel buttonPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
         btnApprove.setText("Approve Protocol");
-        btnApprove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnApproveActionPerformed(evt);
-            }
-        });
+        btnApprove.setBackground(new java.awt.Color(0, 120, 102));
+        btnApprove.setForeground(java.awt.Color.WHITE);
+        btnApprove.addActionListener(this::btnApproveActionPerformed);
+        buttonPanel.add(btnApprove);
 
-        btnReject.setBackground(new java.awt.Color(204, 0, 0));
-        btnReject.setFont(new java.awt.Font("Arial", 1, 16));
-        btnReject.setForeground(new java.awt.Color(255, 255, 255));
         btnReject.setText("Reject Protocol");
-        btnReject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRejectActionPerformed(evt);
-            }
-        });
+        btnReject.setBackground(new java.awt.Color(204, 0, 0));
+        btnReject.setForeground(java.awt.Color.WHITE);
+        btnReject.addActionListener(this::btnRejectActionPerformed);
+        buttonPanel.add(btnReject);
 
-        btnRefresh.setBackground(new java.awt.Color(0, 102, 102));
-        btnRefresh.setFont(new java.awt.Font("Arial", 1, 14));
-        btnRefresh.setForeground(new java.awt.Color(204, 255, 204));
         btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        buttonPanel.add(btnRefresh);
 
-        btnBack.setBackground(new java.awt.Color(0, 102, 102));
-        btnBack.setFont(new java.awt.Font("Arial", 1, 14));
-        btnBack.setForeground(new java.awt.Color(204, 255, 204));
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 4;
+        gbc.weighty = 0;
+        add(buttonPanel, gbc);
+        
         btnBack.setText("<< Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRefresh))
-                    .addComponent(btnBack))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRefresh))
-                .addGap(18, 18, 18)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        btnBack.addActionListener(this::btnBackActionPerformed);
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        add(btnBack, gbc);
+        
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed

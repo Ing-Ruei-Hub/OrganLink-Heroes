@@ -44,29 +44,32 @@ public class HospitalRoleWorkAreaJPanel extends javax.swing.JPanel {
 
         btnViewDonorAplication = new javax.swing.JButton();
 
-        btnViewDonorAplication.setText("VIew Donor Application");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+
+        btnViewDonorAplication.setBackground(new java.awt.Color(0, 120, 102));
+        btnViewDonorAplication.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnViewDonorAplication.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewDonorAplication.setText("View Donor Application");
+        btnViewDonorAplication.setPreferredSize(new java.awt.Dimension(220, 40));
         btnViewDonorAplication.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewDonorAplicationActionPerformed(evt);
             }
         });
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new java.awt.Insets(20, 0, 0, 0);
+        add(btnViewDonorAplication, gbc);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(btnViewDonorAplication, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(599, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(btnViewDonorAplication, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(480, Short.MAX_VALUE))
-        );
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel("Hospital Work Area");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new java.awt.Insets(0, 0, 0, 0);
+        add(titleLabel, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewDonorAplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDonorAplicationActionPerformed
