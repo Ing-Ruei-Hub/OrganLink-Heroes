@@ -22,6 +22,7 @@ public class RecipientRole extends Role{
                 (RecipientOrganization) organization, enterprise, network, business);
     }
     
+    
     @Override
     public String toString() {
         return RoleType.Recipient.getValue();
