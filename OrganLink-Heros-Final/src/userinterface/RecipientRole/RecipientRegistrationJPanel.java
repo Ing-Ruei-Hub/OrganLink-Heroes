@@ -20,6 +20,7 @@ import javax.swing.JPanel;
  *
  * @author eric
  */
+
 public class RecipientRegistrationJPanel extends javax.swing.JPanel {
 
     /**

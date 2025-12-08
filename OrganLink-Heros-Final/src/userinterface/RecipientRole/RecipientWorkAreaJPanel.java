@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author eric
  */
+
 public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
 
     /**
