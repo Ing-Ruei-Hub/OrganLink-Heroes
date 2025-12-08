@@ -78,24 +78,18 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMyRegistrations = new javax.swing.JTable();
 
-        setBackground(new java.awt.Color(204, 204, 255));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setText("Recipient Work Area");
-
-        btnNewRegistration.setText("New Registration");
-        btnNewRegistration.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewRegistrationActionPerformed(evt);
-            }
-        });
-
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
 
         tblMyRegistrations.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -117,39 +111,28 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblMyRegistrations);
+        
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(jScrollPane1, gbc);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(btnNewRegistration)
-                        .addGap(271, 271, 271)
-                        .addComponent(btnRefresh))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 993, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(56, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNewRegistration)
-                    .addComponent(btnRefresh))
-                .addContainerGap(193, Short.MAX_VALUE))
-        );
+        JPanel buttonPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
+        btnNewRegistration.setText("New Registration");
+        btnNewRegistration.setBackground(new java.awt.Color(0, 120, 102));
+        btnNewRegistration.setForeground(java.awt.Color.WHITE);
+        btnNewRegistration.addActionListener(this::btnNewRegistrationActionPerformed);
+        buttonPanel.add(btnNewRegistration);
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        buttonPanel.add(btnRefresh);
+        
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        add(buttonPanel, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNewRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewRegistrationActionPerformed

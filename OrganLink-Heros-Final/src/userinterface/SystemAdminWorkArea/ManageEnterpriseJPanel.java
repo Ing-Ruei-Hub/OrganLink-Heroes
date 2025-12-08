@@ -82,6 +82,17 @@ public class ManageEnterpriseJPanel extends JPanel {
         jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel4.setText("Manage Enterprise");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel4, gbc);
 
         enterpriseJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -104,22 +115,61 @@ public class ManageEnterpriseJPanel extends JPanel {
         });
         jScrollPane1.setViewportView(enterpriseJTable);
 
-        jLabel1.setText("Network");
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jScrollPane1, gbc);
 
+        JPanel formPanel = new JPanel(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints formGbc = new java.awt.GridBagConstraints();
+        formGbc.anchor = java.awt.GridBagConstraints.WEST;
+        formGbc.insets = new java.awt.Insets(5, 5, 5, 5);
+
+        formGbc.gridx = 0;
+        formGbc.gridy = 0;
+        formPanel.add(new javax.swing.JLabel("Network"), formGbc);
+        formGbc.gridx = 1;
         networkJComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        formPanel.add(networkJComboBox, formGbc);
 
-        jLabel2.setText("Name");
-
-        jLabel3.setText("Enterprise Type");
-
+        formGbc.gridy = 1;
+        formGbc.gridx = 0;
+        formPanel.add(new javax.swing.JLabel("Enterprise Type"), formGbc);
+        formGbc.gridx = 1;
         enterpriseTypeJComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        formPanel.add(enterpriseTypeJComboBox, formGbc);
+        
+        formGbc.gridy = 2;
+        formGbc.gridx = 0;
+        formPanel.add(new javax.swing.JLabel("Name"), formGbc);
+        formGbc.gridx = 1;
+        nameJTextField.setColumns(15);
+        formPanel.add(nameJTextField, formGbc);
+
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.weighty = 0;
+        gbc.fill = java.awt.GridBagConstraints.NONE;
+        add(formPanel, gbc);
 
         submitJButton.setText("Submit");
+        submitJButton.setBackground(new java.awt.Color(0, 120, 102));
+        submitJButton.setForeground(java.awt.Color.WHITE);
         submitJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitJButtonActionPerformed(evt);
             }
         });
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(submitJButton, gbc);
 
         backJButton.setText("<< Back");
         backJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -127,66 +177,11 @@ public class ManageEnterpriseJPanel extends JPanel {
                 backJButtonActionPerformed(evt);
             }
         });
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setText("Manage Enterprise");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(backJButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(networkJComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(enterpriseTypeJComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(nameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(290, 290, 290)
-                        .addComponent(submitJButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(264, 264, 264)
-                        .addComponent(jLabel4)))
-                .addContainerGap(128, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(networkJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(enterpriseTypeJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(nameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(submitJButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(backJButton)
-                .addGap(24, 24, 24))
-        );
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        add(backJButton, gbc);
     }// </editor-fold>                        
 
     private void submitJButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              

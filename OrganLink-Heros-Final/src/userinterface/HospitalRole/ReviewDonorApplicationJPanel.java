@@ -123,22 +123,19 @@ public class ReviewDonorApplicationJPanel extends javax.swing.JPanel {
         btnViewDetail = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        jLabel4.setText("Review Donor Aplication:");
-
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel4.setText("Review Donor Application");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel4, gbc);
+        
         tblReviewDonor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -151,69 +148,45 @@ public class ReviewDonorApplicationJPanel extends javax.swing.JPanel {
             }
         ));
         jScrollPane2.setViewportView(tblReviewDonor);
+        
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 4;
+        gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jScrollPane2, gbc);
 
+        JPanel buttonPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
         btnApprove.setText("Approve");
-        btnApprove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnApproveActionPerformed(evt);
-            }
-        });
+        btnApprove.setBackground(new java.awt.Color(0, 120, 102));
+        btnApprove.setForeground(java.awt.Color.WHITE);
+        btnApprove.addActionListener(this::btnApproveActionPerformed);
+        buttonPanel.add(btnApprove);
 
         btnReject.setText("Reject");
-        btnReject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRejectActionPerformed(evt);
-            }
-        });
+        btnReject.addActionListener(this::btnRejectActionPerformed);
+        buttonPanel.add(btnReject);
 
         btnViewDetail.setText("View Detail");
-        btnViewDetail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewDetailActionPerformed(evt);
-            }
-        });
-
+        btnViewDetail.addActionListener(this::btnViewDetailActionPerformed);
+        buttonPanel.add(btnViewDetail);
+        
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 4;
+        gbc.weighty = 0;
+        add(buttonPanel, gbc);
+        
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
         btnBack.setText("Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBack)
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
-                        .addComponent(btnViewDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(112, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnViewDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(116, Short.MAX_VALUE))
-        );
+        btnBack.addActionListener(this::btnBackActionPerformed);
+        add(btnBack, gbc);
+        
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed

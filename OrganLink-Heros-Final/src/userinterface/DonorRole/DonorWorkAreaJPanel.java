@@ -45,29 +45,32 @@ public class DonorWorkAreaJPanel extends javax.swing.JPanel {
 
         btnRegister = new javax.swing.JButton();
 
-        btnRegister.setText("Register");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+
+        btnRegister.setBackground(new java.awt.Color(0, 120, 102));
+        btnRegister.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRegister.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegister.setText("Register as a Donor");
+        btnRegister.setPreferredSize(new java.awt.Dimension(200, 40));
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegisterActionPerformed(evt);
             }
         });
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new java.awt.Insets(20, 0, 0, 0);
+        add(btnRegister, gbc);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(646, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(440, Short.MAX_VALUE))
-        );
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel("Donor Work Area");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new java.awt.Insets(0, 0, 0, 0);
+        add(titleLabel, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed

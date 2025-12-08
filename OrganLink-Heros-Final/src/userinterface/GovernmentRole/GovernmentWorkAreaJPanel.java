@@ -42,6 +42,7 @@ public class GovernmentWorkAreaJPanel extends javax.swing.JPanel{
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -50,83 +51,48 @@ public class GovernmentWorkAreaJPanel extends javax.swing.JPanel{
         btnEmergencyReview = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(0, 153, 153));
-        setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
-
-        lblTitle.setFont(new java.awt.Font("Arial", 1, 28));
-        lblTitle.setForeground(new java.awt.Color(204, 255, 204));
-        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(0, 102, 102));
         lblTitle.setText("Government Official Work Area");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(lblTitle, gbc);
 
-        lblWelcome.setFont(new java.awt.Font("Arial", 0, 18));
-        lblWelcome.setForeground(new java.awt.Color(204, 255, 204));
-        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblWelcome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblWelcome.setText("Welcome, Government Official");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
-            .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lblTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblWelcome)
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+        gbc.gridy = 1;
+        add(lblWelcome, gbc);
 
         btnEmergencyReview.setBackground(new java.awt.Color(204, 0, 0));
-        btnEmergencyReview.setFont(new java.awt.Font("Arial", 1, 20));
+        btnEmergencyReview.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEmergencyReview.setForeground(new java.awt.Color(255, 255, 255));
         btnEmergencyReview.setText("Emergency Protocol Review");
+        btnEmergencyReview.setPreferredSize(new java.awt.Dimension(250, 40));
         btnEmergencyReview.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEmergencyReviewActionPerformed(evt);
             }
         });
+        gbc.gridy = 2;
+        gbc.insets = new java.awt.Insets(20, 10, 10, 10);
+        add(btnEmergencyReview, gbc);
 
-        btnBack.setBackground(new java.awt.Color(0, 102, 102));
-        btnBack.setFont(new java.awt.Font("Arial", 1, 14));
-        btnBack.setForeground(new java.awt.Color(204, 255, 204));
         btnBack.setText("<< Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(440, 440, 440)
-                .addComponent(btnEmergencyReview, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150)
-                .addComponent(btnEmergencyReview, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(30, 30, 30))
-        );
+        gbc.gridy = 3;
+        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gbc.weighty = 1.0;
+        add(btnBack, gbc);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEmergencyReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmergencyReviewActionPerformed

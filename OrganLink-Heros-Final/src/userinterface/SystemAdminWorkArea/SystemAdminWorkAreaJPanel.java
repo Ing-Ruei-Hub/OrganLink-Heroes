@@ -89,6 +89,7 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
         setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
         jTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
@@ -96,50 +97,76 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
             }
         });
         jScrollPane1.setViewportView(jTree);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 118, Short.MAX_VALUE))
-        );
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jSplitPane.setLeftComponent(jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        java.awt.GridBagLayout jPanel2Layout = new java.awt.GridBagLayout();
+        jPanel2Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
+        jPanel2Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0};
+        jPanel2.setLayout(jPanel2Layout);
 
         jLabel1.setText("Selected Node:");
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(jLabel1, gbc);
 
         lblSelectedNode.setText("<View_selected_node>");
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(lblSelectedNode, gbc);
 
         btnManageNetwork.setText("Manage Network");
+        btnManageNetwork.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageNetwork.setForeground(java.awt.Color.WHITE);
         btnManageNetwork.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageNetworkActionPerformed(evt);
             }
         });
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(btnManageNetwork, gbc);
 
         btnManageEnterprise.setText("Manage Enterprise");
+        btnManageEnterprise.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageEnterprise.setForeground(java.awt.Color.WHITE);
         btnManageEnterprise.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageEnterpriseActionPerformed(evt);
             }
         });
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(btnManageEnterprise, gbc);
 
         btnManageAdmin.setText("Manage Enterprise Admin");
+        btnManageAdmin.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageAdmin.setForeground(java.awt.Color.WHITE);
         btnManageAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageAdminActionPerformed(evt);
             }
         });
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(btnManageAdmin, gbc);
 
         btnMonitorEmergency.setBackground(new java.awt.Color(204, 0, 0));
         btnMonitorEmergency.setFont(new java.awt.Font("Arial", 1, 14));
@@ -150,48 +177,27 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
                 btnMonitorEmergencyActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblSelectedNode))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnManageNetwork)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnManageEnterprise)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnManageAdmin))
-                    .addComponent(btnMonitorEmergency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(125, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(lblSelectedNode))
-                .addGap(54, 54, 54)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnManageNetwork)
-                    .addComponent(btnManageEnterprise)
-                    .addComponent(btnManageAdmin))
-                .addGap(30, 30, 30)
-                .addComponent(btnMonitorEmergency, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 5;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(btnMonitorEmergency, gbc);
 
         jSplitPane.setRightComponent(jPanel2);
-
+        
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel("System Admin Work Area");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        
+        JPanel titlePanel = new JPanel(new java.awt.BorderLayout());
+        titlePanel.add(titleLabel, java.awt.BorderLayout.CENTER);
+        
+        add(titlePanel, java.awt.BorderLayout.NORTH);
         add(jSplitPane, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents// </editor-fold>//GEN-END:initComponents
 
     private void btnManageNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageNetworkActionPerformed
         ManageNetworkJPanel manageNetworkJPanel = new ManageNetworkJPanel(userProcessContainer, ecosystem);

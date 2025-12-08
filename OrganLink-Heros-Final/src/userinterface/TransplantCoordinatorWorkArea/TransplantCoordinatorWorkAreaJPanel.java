@@ -47,63 +47,56 @@ public class TransplantCoordinatorWorkAreaJPanel extends JPanel {
         btnManageLogisticsRequests = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel1.setText("Transplant Coordinator Work Area");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(10, 10, 20, 10);
+        add(jLabel1, gbc);
+
         lblEnterprise.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblEnterprise.setText("Enterprise:");
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(lblEnterprise, gbc);
 
         lblValue.setText("<value>");
+        gbc.gridx = 1;
+        add(lblValue, gbc);
 
         btnManageRecipientRequests.setText("Manage Recipient & Matches");
+        btnManageRecipientRequests.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageRecipientRequests.setForeground(java.awt.Color.WHITE);
+        btnManageRecipientRequests.setPreferredSize(new java.awt.Dimension(250, 40));
         btnManageRecipientRequests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageRecipientRequestsActionPerformed(evt);
             }
         });
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new java.awt.Insets(20, 10, 10, 10);
+        add(btnManageRecipientRequests, gbc);
 
         btnManageLogisticsRequests.setText("Manage Organ Transport Requests");
+        btnManageLogisticsRequests.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageLogisticsRequests.setForeground(java.awt.Color.WHITE);
+        btnManageLogisticsRequests.setPreferredSize(new java.awt.Dimension(250, 40));
         btnManageLogisticsRequests.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageLogisticsRequestsActionPerformed(evt);
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Transplant Coordinator Work Area");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(242, 242, 242)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnManageLogisticsRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnManageRecipientRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblEnterprise)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblValue, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(143, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel1)
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEnterprise)
-                    .addComponent(lblValue))
-                .addGap(42, 42, 42)
-                .addComponent(btnManageRecipientRequests)
-                .addGap(18, 18, 18)
-                .addComponent(btnManageLogisticsRequests)
-                .addContainerGap(221, Short.MAX_VALUE))
-        );
+        gbc.gridy = 3;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(btnManageLogisticsRequests, gbc);
     }// </editor-fold>                        
 
     private void btnManageRecipientRequestsActionPerformed(java.awt.event.ActionEvent evt) {                                                           
