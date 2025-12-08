@@ -112,7 +112,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                 }
             }
 
-            if (selectedDonor.getStatus().equalsIgnoreCase("Tests Completed - Lab Verified") && isCompatible) {
+            if (selectedDonor.getStatus().equalsIgnoreCase("Tests Verified") && isCompatible) {
                 btnSendMatchForDoctorVerification.setEnabled(true);
             } else {
                 btnSendMatchForDoctorVerification.setEnabled(false);
