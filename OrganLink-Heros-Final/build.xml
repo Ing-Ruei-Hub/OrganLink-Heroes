@@ -83,4 +83,12 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-pre-compile">
+        <path id="flatlaf.path">
+            <fileset dir="lib">
+                <include name="flatlaf-3.4.1.jar"/>
+            </fileset>
+        </path>
+        <property name="javac.classpath" value="${javac.classpath}:${toString:flatlaf.path}"/>
+    </target>
 </project>
