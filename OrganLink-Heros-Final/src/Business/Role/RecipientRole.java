@@ -18,15 +18,8 @@ public class RecipientRole extends Role{
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, Network network, EcoSystem business) {
-        // return new RecipientWorkAreaJPanel(userProcessContainer, account, 
-        //         (RecipientOrganization) organization, enterprise, network, business);
-        
-        // --- Temporary Debugging Panel ---
-        JPanel debugPanel = new JPanel();
-        debugPanel.setBackground(java.awt.Color.RED); // Distinct color
-        debugPanel.add(new javax.swing.JLabel("Recipient Debug Panel - Header Test"));
-        return debugPanel;
-        // --- End Temporary Debugging Panel ---
+         return new RecipientWorkAreaJPanel(userProcessContainer, account, 
+                 (RecipientOrganization) organization, enterprise, network, business);
     }
     
     
