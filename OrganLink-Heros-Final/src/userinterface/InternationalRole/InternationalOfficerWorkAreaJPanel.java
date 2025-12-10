@@ -93,7 +93,6 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -125,19 +124,26 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         lblTitle.setText("International Collaboration Center");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 3; // Adjusted gridwidth
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Fill horizontally
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblTitle, gbc);
         
         lblWelcome.setFont(new java.awt.Font("Tahoma", 1, 18));
         gbc.gridy = 1;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Fill horizontally
         add(lblWelcome, gbc);
 
-        JPanel statsPanel = new JPanel(new java.awt.GridLayout(1, 3, 20, 0));
-        statsPanel.setBackground(new java.awt.Color(255, 255, 255));
-        
+        // Stats panels directly in GridBagLayout, sharing horizontal space
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.33; // Share horizontal space evenly
+        gbc.fill = java.awt.GridBagConstraints.BOTH; // Fill both
+        gbc.insets = new java.awt.Insets(20, 10, 10, 10);
+
         jPanel2.setBackground(new java.awt.Color(0, 102, 102));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 255, 204), 2));
+        jPanel2.setLayout(new java.awt.BorderLayout());
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14));
         jLabel2.setForeground(new java.awt.Color(204, 255, 204));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -146,12 +152,14 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         lblTotalRequests.setForeground(new java.awt.Color(255, 255, 255));
         lblTotalRequests.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalRequests.setText("0");
-        jPanel2.add(jLabel2);
-        jPanel2.add(lblTotalRequests);
-        statsPanel.add(jPanel2);
+        jPanel2.add(jLabel2, java.awt.BorderLayout.NORTH);
+        jPanel2.add(lblTotalRequests, java.awt.BorderLayout.CENTER);
+        gbc.gridx = 0;
+        add(jPanel2, gbc);
 
         jPanel3.setBackground(new java.awt.Color(0, 102, 102));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 255, 204), 2));
+        jPanel3.setLayout(new java.awt.BorderLayout());
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14));
         jLabel4.setForeground(new java.awt.Color(204, 255, 204));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -160,12 +168,14 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         lblPendingRequests.setForeground(new java.awt.Color(255, 255, 255));
         lblPendingRequests.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPendingRequests.setText("0");
-        jPanel3.add(jLabel4);
-        jPanel3.add(lblPendingRequests);
-        statsPanel.add(jPanel3);
+        jPanel3.add(jLabel4, java.awt.BorderLayout.NORTH);
+        jPanel3.add(lblPendingRequests, java.awt.BorderLayout.CENTER);
+        gbc.gridx = 1;
+        add(jPanel3, gbc);
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 102));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 255, 204), 2));
+        jPanel4.setLayout(new java.awt.BorderLayout());
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14));
         jLabel6.setForeground(new java.awt.Color(204, 255, 204));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -174,15 +184,11 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         lblMatchesFound.setForeground(new java.awt.Color(255, 255, 255));
         lblMatchesFound.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMatchesFound.setText("0");
-        jPanel4.add(jLabel6);
-        jPanel4.add(lblMatchesFound);
-        statsPanel.add(jPanel4);
+        jPanel4.add(jLabel6, java.awt.BorderLayout.NORTH);
+        jPanel4.add(lblMatchesFound, java.awt.BorderLayout.CENTER);
+        gbc.gridx = 2;
+        add(jPanel4, gbc);
 
-        gbc.gridy = 2;
-        gbc.gridwidth = 4;
-        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        add(statsPanel, gbc);
-        
         tblRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -202,26 +208,49 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblRequests);
 
         gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3; // Span across all 3 columns
         gbc.fill = java.awt.GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jScrollPane1, gbc);
 
-        JPanel buttonPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 10));
+        JPanel buttonPanel = new JPanel(new java.awt.GridBagLayout()); // Changed to GridBagLayout for internal buttons
+        java.awt.GridBagConstraints btnGbc = new java.awt.GridBagConstraints();
+        btnGbc.insets = new java.awt.Insets(5, 5, 5, 5);
+        btnGbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Fill horizontally
+        btnGbc.weightx = 1.0; // Distribute horizontal space evenly
+
         btnInitiateSearch.setText("Initiate International Search");
         btnInitiateSearch.setBackground(new java.awt.Color(0, 120, 102));
         btnInitiateSearch.setForeground(java.awt.Color.WHITE);
         btnInitiateSearch.addActionListener(this::btnInitiateSearchActionPerformed);
-        buttonPanel.add(btnInitiateSearch);
+        btnGbc.gridx = 0;
+        btnGbc.gridy = 0;
+        buttonPanel.add(btnInitiateSearch, btnGbc);
 
         btnMatchFound.setText("Match Found");
+        btnMatchFound.setBackground(new java.awt.Color(0, 120, 102));
+        btnMatchFound.setForeground(java.awt.Color.WHITE);
         btnMatchFound.addActionListener(this::btnMatchFoundActionPerformed);
-        buttonPanel.add(btnMatchFound);
+        btnGbc.gridx = 1;
+        btnGbc.gridy = 0;
+        buttonPanel.add(btnMatchFound, btnGbc);
         
         btnNoMatch.setText("No Match Found");
+        btnNoMatch.setBackground(new java.awt.Color(0, 120, 102));
+        btnNoMatch.setForeground(java.awt.Color.WHITE);
         btnNoMatch.addActionListener(this::btnNoMatchActionPerformed);
-        buttonPanel.add(btnNoMatch);
+        btnGbc.gridx = 2;
+        btnGbc.gridy = 0;
+        buttonPanel.add(btnNoMatch, btnGbc);
 
         gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL; // Fill horizontally
+        gbc.weightx = 1.0;
         gbc.weighty = 0;
         add(buttonPanel, gbc);
 
@@ -235,6 +264,9 @@ public class InternationalOfficerWorkAreaJPanel extends javax.swing.JPanel {
         bottomPanel.add(btnRefresh, java.awt.BorderLayout.EAST);
         
         gbc.gridy = 5;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(bottomPanel, gbc);
     }// </editor-fold>//GEN-END:initComponents
 

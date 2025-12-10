@@ -37,7 +37,7 @@ public class ManageNetworkJPanel extends JPanel {
         model.setRowCount(0);
         for (Network network : system.getNetworkList()) {
             Object[] row = new Object[1];
-            row[0] = network.getName();
+            row[0] = network;
             model.addRow(row);
         }
     }
@@ -53,24 +53,26 @@ public class ManageNetworkJPanel extends JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         networkJTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         submitJButton = new javax.swing.JButton();
         nameJTextField = new javax.swing.JTextField();
         backJButton = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        updateJButton = new javax.swing.JButton();
+        deleteJButton = new javax.swing.JButton();
+        
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
         
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel2.setText("Manage Network");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        titleLabel.setText("Manage Network");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.insets = new java.awt.Insets(10, 10, 20, 10);
-        add(jLabel2, gbc);
+        add(titleLabel, gbc);
 
         networkJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -113,8 +115,7 @@ public class ManageNetworkJPanel extends JPanel {
         add(jScrollPane1, gbc);
 
         JPanel formPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
-        jLabel1.setText("Name");
-        formPanel.add(jLabel1);
+        formPanel.add(new javax.swing.JLabel("Name"));
 
         nameJTextField.setColumns(15);
         formPanel.add(nameJTextField);
@@ -128,6 +129,22 @@ public class ManageNetworkJPanel extends JPanel {
             }
         });
         formPanel.add(submitJButton);
+
+        updateJButton.setText("Update");
+        updateJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateJButtonActionPerformed(evt);
+            }
+        });
+        formPanel.add(updateJButton);
+        
+        deleteJButton.setText("Delete");
+        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJButtonActionPerformed(evt);
+            }
+        });
+        formPanel.add(deleteJButton);
 
         gbc.gridy = 2;
         gbc.gridx = 0;
@@ -154,11 +171,22 @@ public class ManageNetworkJPanel extends JPanel {
     private void submitJButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 
         String name = nameJTextField.getText();
+        if(name == null || name.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter a valid network name!");
+            return;
+        }
+        for(Network network : system.getNetworkList()){
+            if(network.getName().equalsIgnoreCase(name)){
+                JOptionPane.showMessageDialog(null, "Network already exists!");
+                return;
+            }
+        }
 
         Network network = system.createAndAddNetwork();
         network.setName(name);
 
         populateNetworkTable();
+        nameJTextField.setText("");
     }                                             
 
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -171,13 +199,54 @@ public class ManageNetworkJPanel extends JPanel {
         layout.previous(userProcessContainer);
     }                                           
 
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = networkJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to delete!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Network network = (Network) networkJTable.getValueAt(selectedRow, 0);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to delete the network?", "Warning", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            system.deleteNetwork(network);
+            populateNetworkTable();
+        }
+    }
+    
+    private void updateJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = networkJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to update!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Network network = (Network) networkJTable.getValueAt(selectedRow, 0);
+        String newName = JOptionPane.showInputDialog(null, "Enter new network name", network.getName());
+        
+        if(newName == null || newName.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter a valid network name!");
+            return;
+        }
+        
+        for(Network n : system.getNetworkList()){
+            if(n.getName().equalsIgnoreCase(newName)){
+                JOptionPane.showMessageDialog(null, "Network already exists!");
+                return;
+            }
+        }
+        
+        network.setName(newName);
+        populateNetworkTable();
+    }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton backJButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton deleteJButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameJTextField;
     private javax.swing.JTable networkJTable;
     private javax.swing.JButton submitJButton;
+    private javax.swing.JButton updateJButton;
     // End of variables declaration                   
 }

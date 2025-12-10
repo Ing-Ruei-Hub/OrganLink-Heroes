@@ -69,4 +69,8 @@ public class OrganizationDirectory {
         return organization;
     }
     
+    public void deleteOrganization(Organization org){
+        organizationList.remove(org);
+    }
+    
 }

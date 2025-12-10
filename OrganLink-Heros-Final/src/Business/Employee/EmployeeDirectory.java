@@ -26,4 +26,8 @@ public class EmployeeDirectory {
         return employee;
     }
     
+    public void deleteEmployee(Employee employee){
+        employeeList.remove(employee);
+    }
+    
 }

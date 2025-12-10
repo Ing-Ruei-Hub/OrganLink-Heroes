@@ -1,9 +1,10 @@
 package Business.Donor;
 
-import Business.Medical.MedicalTestResult; // Import MedicalTestResult
-import java.util.ArrayList; // Import ArrayList
+import Business.Medical.MedicalTestResult;
+import Business.UserAccount.UserAccount;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List; // Import List
+import java.util.List;
 
 public class Donor {
 
@@ -12,20 +13,29 @@ public class Donor {
     private Date dateOfBirth;
     private String bloodType;
     private String organToDonate;
-    private String medicalHistory; // A simple string for now, could be a complex object
-    private String status; // e.g., "Registered", "Approved", "Medical Tests Pending", "Compatible"
+    private String medicalHistory;
+    private String status;
     private String contactNumber;
     private String email;
     private int age;
-    private List<MedicalTestResult> medicalTestResultList; // New field to store test results
+    private List<MedicalTestResult> medicalTestResultList;
+    private UserAccount userAccount;
 
     private static int counter = 0;
 
     public Donor(String name) {
         this.name = name;
         this.donorId = "DON" + counter++;
-        this.status = "Registered"; // Default status
-        this.medicalTestResultList = new ArrayList<>(); // Initialize the list
+        this.status = "Registered";
+        this.medicalTestResultList = new ArrayList<>();
+    }
+    
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     /**

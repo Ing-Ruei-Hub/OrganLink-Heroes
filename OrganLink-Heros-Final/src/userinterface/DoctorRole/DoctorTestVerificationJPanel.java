@@ -195,7 +195,7 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
             return;
         }
         
-        request.setStatus("Verified, Ready for Transport Coordination");
+        request.setStatus("Doctor Verified");
         request.setResolveDate(new java.util.Date());
         request.setVerifier(account); // Doctor who verified
 
@@ -204,8 +204,8 @@ public class DoctorTestVerificationJPanel extends javax.swing.JPanel {
         request.setReceiver(originalSender);
 
         // Update Donor and Recipient status
-        request.getDonor().setStatus("Verified, Ready for Transport Coordination");
-        request.getRecipient().setStatus("Verified, Ready for Transport Coordination");
+        request.getDonor().setStatus("Doctor Verified");
+        request.getRecipient().setStatus("Doctor Verified");
 
         JOptionPane.showMessageDialog(this, "Medical test result for matched pair verified and sent to Transplant Coordinator!", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateTestRequestTable();

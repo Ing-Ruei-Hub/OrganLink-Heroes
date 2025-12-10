@@ -71,28 +71,28 @@ public class ManageEnterpriseJPanel extends JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         enterpriseJTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         networkJComboBox = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
         nameJTextField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         enterpriseTypeJComboBox = new javax.swing.JComboBox();
         submitJButton = new javax.swing.JButton();
         backJButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        updateJButton = new javax.swing.JButton();
+        deleteJButton = new javax.swing.JButton();
+        
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel4.setText("Manage Enterprise");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        titleLabel.setText("Manage Enterprise");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.insets = new java.awt.Insets(10, 10, 20, 10);
-        add(jLabel4, gbc);
+        add(titleLabel, gbc);
 
         enterpriseJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -170,6 +170,28 @@ public class ManageEnterpriseJPanel extends JPanel {
         gbc.gridwidth = 2;
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         add(submitJButton, gbc);
+        
+        updateJButton.setText("Update");
+        updateJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateJButtonActionPerformed(evt);
+            }
+        });
+        gbc.gridy = 3;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        add(updateJButton, gbc);
+        
+        deleteJButton.setText("Delete");
+        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJButtonActionPerformed(evt);
+            }
+        });
+        gbc.gridy = 3;
+        gbc.gridx = 2;
+        gbc.gridwidth = 1;
+        add(deleteJButton, gbc);
 
         backJButton.setText("<< Back");
         backJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -195,10 +217,21 @@ public class ManageEnterpriseJPanel extends JPanel {
         }
 
         String name = nameJTextField.getText();
+        if(name == null || name.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter a valid enterprise name!");
+            return;
+        }
+        for(Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()){
+            if(enterprise.getName().equalsIgnoreCase(name)){
+                JOptionPane.showMessageDialog(null, "Enterprise already exists!");
+                return;
+            }
+        }
 
         network.getEnterpriseDirectory().createAndAddEnterprise(name, type);
 
         populateTable();
+        nameJTextField.setText("");
     }                                             
 
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -211,17 +244,60 @@ public class ManageEnterpriseJPanel extends JPanel {
         layout.previous(userProcessContainer);
     }                                           
 
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = enterpriseJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to delete!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Enterprise enterprise = (Enterprise) enterpriseJTable.getValueAt(selectedRow, 0);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to delete the enterprise?", "Warning", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            for(Network network : system.getNetworkList()){
+                network.getEnterpriseDirectory().deleteEnterprise(enterprise);
+            }
+            populateTable();
+        }
+    }
+    
+    private void updateJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = enterpriseJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to update!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Enterprise enterprise = (Enterprise) enterpriseJTable.getValueAt(selectedRow, 0);
+        String newName = JOptionPane.showInputDialog(null, "Enter new enterprise name", enterprise.getName());
+        
+        if(newName == null || newName.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter a valid enterprise name!");
+            return;
+        }
+        
+        for(Network network : system.getNetworkList()){
+            for(Enterprise e : network.getEnterpriseDirectory().getEnterpriseList()){
+                if(e.getName().equalsIgnoreCase(newName)){
+                    JOptionPane.showMessageDialog(null, "Enterprise already exists!");
+                    return;
+                }
+            }
+        }
+        
+        enterprise.setName(newName);
+        populateTable();
+    }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton backJButton;
+    private javax.swing.JButton deleteJButton;
     private javax.swing.JTable enterpriseJTable;
     private javax.swing.JComboBox enterpriseTypeJComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameJTextField;
     private javax.swing.JComboBox networkJComboBox;
     private javax.swing.JButton submitJButton;
+    private javax.swing.JButton updateJButton;
     // End of variables declaration                   
 }

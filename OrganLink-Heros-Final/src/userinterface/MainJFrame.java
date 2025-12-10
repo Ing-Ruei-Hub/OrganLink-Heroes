@@ -40,6 +40,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblLoggedInUser; // To display logged-in username
     private javax.swing.JPanel headerPanel;     // Top panel for user info and logout
     private javax.swing.JPanel cardSwapPanel;   // Panel with CardLayout to swap login/work area
+    private javax.swing.JLabel lblAppName; // New JLabel for the application title
     // --- End Class Member Variables ---
 
     public MainJFrame() {
@@ -99,6 +100,14 @@ public class MainJFrame extends javax.swing.JFrame {
 
         // --- Styling for jPanel1 (Login Panel) ---
         jPanel1.setBackground(new java.awt.Color(240, 242, 245)); // Light gray/off-white for login panel
+        
+        // Initialize and style lblAppName for the login page
+        lblAppName = new javax.swing.JLabel();
+        lblAppName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // Larger, bold font
+        lblAppName.setForeground(new java.awt.Color(0, 102, 102)); // Darker teal color
+        lblAppName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); // Center text
+        lblAppName.setText("OrganLink-Heroes"); // Set the application title
+        lblAppName.setPreferredSize(new java.awt.Dimension(200, 40)); // Increased width to ensure full text display
 
         jLabel1.setText("User Name");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // Bold, size 12
@@ -136,6 +145,7 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblAppName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) // Add lblAppName
                     .addComponent(loginJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(loginJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,7 +157,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(20, 20, 20) // Adjusted top padding
+                .addComponent(lblAppName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE) // Add lblAppName
+                .addGap(18, 18, 18) // Space between app name and user name field
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(userNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)

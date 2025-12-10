@@ -84,6 +84,7 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
         btnManageNetwork = new javax.swing.JButton();
         btnManageEnterprise = new javax.swing.JButton();
         btnManageAdmin = new javax.swing.JButton();
+        btnManageOrganization = new javax.swing.JButton();
         btnMonitorEmergency = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
@@ -167,6 +168,21 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(btnManageAdmin, gbc);
+        
+        btnManageOrganization.setText("Manage Organization");
+        btnManageOrganization.setBackground(new java.awt.Color(0, 120, 102));
+        btnManageOrganization.setForeground(java.awt.Color.WHITE);
+        btnManageOrganization.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageOrganizationActionPerformed(evt);
+            }
+        });
+        gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 6;
+        gbc.gridy = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(btnManageOrganization, gbc);
 
         btnMonitorEmergency.setBackground(new java.awt.Color(204, 0, 0));
         btnMonitorEmergency.setFont(new java.awt.Font("Arial", 1, 14));
@@ -220,6 +236,13 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnManageAdminActionPerformed
 
+    private void btnManageOrganizationActionPerformed(java.awt.event.ActionEvent evt) {
+        ManageOrganizationJPanel manageOrganizationJPanel = new ManageOrganizationJPanel(userProcessContainer, ecosystem);
+        userProcessContainer.add("manageOrganizationJPanel", manageOrganizationJPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }
+    
     private void btnMonitorEmergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMonitorEmergencyActionPerformed
         SystemAdminEmergencyMonitorJPanel monitorPanel = new SystemAdminEmergencyMonitorJPanel(userProcessContainer, ecosystem);
         userProcessContainer.add("SystemAdminEmergencyMonitor", monitorPanel);
@@ -238,6 +261,7 @@ public class SystemAdminWorkAreaJPanel extends JPanel {
     private javax.swing.JButton btnManageAdmin;
     private javax.swing.JButton btnManageEnterprise;
     private javax.swing.JButton btnManageNetwork;
+    private javax.swing.JButton btnManageOrganization;
     private javax.swing.JButton btnMonitorEmergency;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
