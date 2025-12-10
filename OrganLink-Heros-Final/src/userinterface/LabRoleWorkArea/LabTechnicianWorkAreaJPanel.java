@@ -171,8 +171,8 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
             return;
         }
 
-        Object selectedSubject = tblSubjects.getValueAt(selectedRow, 0); // Must be Donor or Recipient
-
+        Object selectedSubject = tblSubjects.getValueAt(selectedRow, 1); // Must be Donor or Recipient
+        System.out.print(selectedSubject.getClass().getSimpleName());
         String testName = JOptionPane.showInputDialog(this, "Enter Test Name:");
         if (testName == null || testName.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Test Name cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
