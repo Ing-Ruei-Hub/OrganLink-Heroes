@@ -59,12 +59,13 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
                         for (Donor donor : donorOrg.getDonorDirectory().getDonorList()) {
                             // Show if approved by hospital or needing retest (internal retest by lab)
                             if (donor.getStatus().equalsIgnoreCase("Approved by Hospital") || donor.getStatus().equalsIgnoreCase("Retest Required") || donor.getStatus().equalsIgnoreCase("Tests Verified")) {
-                                Object[] row = new Object[5];
-                                row[0] = donor; // The Donor object
-                                row[1] = "Donor";
-                                row[2] = donor.getOrganToDonate();
-                                row[3] = donor.getBloodType();
-                                row[4] = donor.getStatus();
+                                Object[] row = new Object[6]; // Increased to 6 for Donor ID
+                                row[0] = donor.getDonorId(); // Assuming Donor class has getDonorId()
+                                row[1] = donor; // The Donor object (Name)
+                                row[2] = "Donor";
+                                row[3] = donor.getOrganToDonate();
+                                row[4] = donor.getBloodType();
+                                row[5] = donor.getStatus();
                                 model.addRow(row);
                             }
                         }
@@ -124,17 +125,17 @@ public class LabTechnicianWorkAreaJPanel extends JPanel {
         
         tblSubjects.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Name", "Type", "Organ", "Blood Type", "Status"
+                "Donor ID", "Name", "Type", "Organ", "Blood Type", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

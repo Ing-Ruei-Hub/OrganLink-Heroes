@@ -93,6 +93,8 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
         headerPanel.add(logoutJButton); // Add to header
+        headerPanel.setVisible(false); // Initially hide the header panel
+
 
         // --- Main panel for centering login and holding work area (mainContentPanel now holds login) ---
         this.mainContentPanel = new JPanel(new java.awt.GridBagLayout());
