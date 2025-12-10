@@ -1,9 +1,10 @@
 package Business.Recipient;
 
-import Business.Medical.MedicalTestResult; // Import MedicalTestResult
-import java.util.ArrayList; // Import ArrayList
+import Business.Medical.MedicalTestResult;
+import Business.UserAccount.UserAccount;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List; // Import List
+import java.util.List;
 
 public class Recipient {
 
@@ -12,20 +13,29 @@ public class Recipient {
     private Date dateOfBirth;
     private String bloodType;
     private String organNeeded;
-    private String medicalHistory; // A simple string for now, could be a complex object
-    private String status; // e.g., "Registered", "Pending Coordinator Review", "Initial Match Found"
-    private String urgencyLevel; // e.g., "High", "Medium", "Low"
+    private String medicalHistory;
+    private String status;
+    private String urgencyLevel;
     private String contactNumber;
     private String email;
-    private List<MedicalTestResult> medicalTestResultList; // New field to store test results
+    private List<MedicalTestResult> medicalTestResultList;
+    private UserAccount userAccount;
 
     private static int counter = 0;
 
     public Recipient(String name) {
         this.name = name;
         this.recipientId = "REC" + counter++;
-        this.status = "Registered"; // Default status
-        this.medicalTestResultList = new ArrayList<>(); // Initialize the list
+        this.status = "Registered";
+        this.medicalTestResultList = new ArrayList<>();
+    }
+    
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     /**

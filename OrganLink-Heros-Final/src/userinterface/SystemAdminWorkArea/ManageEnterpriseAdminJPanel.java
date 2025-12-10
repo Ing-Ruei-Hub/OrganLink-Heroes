@@ -77,32 +77,30 @@ public class ManageEnterpriseAdminJPanel extends JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         enterpriseJTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         networkJComboBox = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
         usernameJTextField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         enterpriseJComboBox = new javax.swing.JComboBox();
         submitJButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         nameJTextField = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
         passwordField = new javax.swing.JPasswordField();
         backJButton = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
+        updateJButton = new javax.swing.JButton();
+        deleteJButton = new javax.swing.JButton();
+        
+        javax.swing.JLabel titleLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel6.setText("Manage Enterprise Admin");
+        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(0, 102, 102));
+        titleLabel.setText("Manage Enterprise Admin");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.insets = new java.awt.Insets(10, 10, 20, 10);
-        add(jLabel6, gbc);
+        add(titleLabel, gbc);
 
         enterpriseJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -196,9 +194,31 @@ public class ManageEnterpriseAdminJPanel extends JPanel {
         });
         gbc.gridy = 3;
         gbc.gridx = 0;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 1;
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         add(submitJButton, gbc);
+        
+        updateJButton.setText("Update");
+        updateJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateJButtonActionPerformed(evt);
+            }
+        });
+        gbc.gridy = 3;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        add(updateJButton, gbc);
+        
+        deleteJButton.setText("Delete");
+        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJButtonActionPerformed(evt);
+            }
+        });
+        gbc.gridy = 3;
+        gbc.gridx = 2;
+        gbc.gridwidth = 1;
+        add(deleteJButton, gbc);
 
         backJButton.setText("<< Back");
         backJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -218,7 +238,6 @@ public class ManageEnterpriseAdminJPanel extends JPanel {
         if (network != null){
             populateEnterpriseComboBox(network);
         }
-        
     }                                                
 
     private void submitJButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
@@ -229,10 +248,24 @@ public class ManageEnterpriseAdminJPanel extends JPanel {
         String password = String.valueOf(passwordField.getPassword());
         String name = nameJTextField.getText();
         
+        if(username.equals("") || password.equals("")||name.equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter all fields", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if(!system.checkIfUserIsUnique(username)){
+            JOptionPane.showMessageDialog(null, "Username already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         Employee employee = enterprise.getEmployeeDirectory().createEmployee(name);
         
         UserAccount account = enterprise.getUserAccountDirectory().createUserAccount(username, password, employee, new AdminRole());
         populateTable();
+        
+        usernameJTextField.setText("");
+        passwordField.setText("");
+        nameJTextField.setText("");
         
     }                                             
 
@@ -246,21 +279,60 @@ public class ManageEnterpriseAdminJPanel extends JPanel {
         layout.previous(userProcessContainer);
     }                                           
 
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = enterpriseJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to delete!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        UserAccount ua = (UserAccount) enterpriseJTable.getValueAt(selectedRow, 2);
+        
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to delete the user account?", "Warning", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            for(Network network : system.getNetworkList()){
+                for(Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()){
+                    enterprise.getUserAccountDirectory().deleteUserAccount(ua);
+                    enterprise.getEmployeeDirectory().deleteEmployee(ua.getEmployee());
+                }
+            }
+            populateTable();
+        }
+    }
+    
+    private void updateJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = enterpriseJTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row to update!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        UserAccount ua = (UserAccount) enterpriseJTable.getValueAt(selectedRow, 2);
+        
+        String newName = JOptionPane.showInputDialog(null, "Enter new name", ua.getEmployee().getName());
+        if(newName != null && !newName.equals("")){
+            ua.getEmployee().setName(newName);
+        }
+        
+        String newPassword = JOptionPane.showInputDialog(null, "Enter new password", ua.getPassword());
+        if(newPassword != null && !newPassword.equals("")){
+            ua.setPassword(newPassword);
+        }
+        
+        populateTable();
+    }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton backJButton;
+    private javax.swing.JButton deleteJButton;
     private javax.swing.JComboBox enterpriseJComboBox;
     private javax.swing.JTable enterpriseJTable;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameJTextField;
     private javax.swing.JComboBox networkJComboBox;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JButton submitJButton;
+    private javax.swing.JButton updateJButton;
     private javax.swing.JTextField usernameJTextField;
     // End of variables declaration                   
 }

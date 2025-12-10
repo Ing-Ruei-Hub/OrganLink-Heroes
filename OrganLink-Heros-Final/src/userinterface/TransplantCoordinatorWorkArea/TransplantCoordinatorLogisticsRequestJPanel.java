@@ -48,7 +48,7 @@ public class TransplantCoordinatorLogisticsRequestJPanel extends JPanel {
         for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()) {
             if (request instanceof MedicalTestWorkRequest) {
                 MedicalTestWorkRequest mRequest = (MedicalTestWorkRequest) request;
-                if (mRequest.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination")) {
+                if (mRequest.getStatus().equalsIgnoreCase("Doctor Verified")) {
                     Object[] row = new Object[6];
                     row[0] = mRequest.getDonor(); // Donor object
                     row[1] = mRequest.getRecipient(); // Recipient object
