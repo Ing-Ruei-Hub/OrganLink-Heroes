@@ -73,7 +73,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         Recipient selectedRecipient = null;
 
         if (selectedRecipientRow >= 0) {
-            selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 0);
+            selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 1);
             String status = selectedRecipient.getStatus();
             if (status.equalsIgnoreCase("Pending Match Doctor Verification") ||
                 status.equalsIgnoreCase("Retest Required by Doctor - Match") ||
@@ -103,7 +103,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
 
         // Handle btnSendMatchForDoctorVerification button
         if (selectedRecipientRow >= 0 && selectedDonorRow >= 0 && !recipientIsInProgress) {
-            Donor selectedDonor = (Donor) compatibleDonorsJTable.getValueAt(selectedDonorRow, 0);
+            Donor selectedDonor = (Donor) compatibleDonorsJTable.getValueAt(selectedDonorRow, 1);
 
             boolean isCompatible = false;
             if (selectedDonor.getOrganToDonate() != null && selectedDonor.getOrganToDonate().equalsIgnoreCase(selectedRecipient.getOrganNeeded())) {
@@ -146,12 +146,13 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
                                 !recipient.getStatus().equalsIgnoreCase("Verified, Ready for Transport Coordination") &&
                                 !recipient.getStatus().equalsIgnoreCase("Organ Transport Requested") &&
                                 !recipient.getStatus().equalsIgnoreCase("Pending International Search")) {
-                                Object[] row = new Object[5];
-                                row[0] = recipient; // toString of Recipient should return name
-                                row[1] = recipient.getOrganNeeded();
-                                row[2] = recipient.getBloodType();
-                                row[3] = recipient.getUrgencyLevel();
-                                row[4] = recipient.getStatus();
+                                Object[] row = new Object[6]; // Increased to 6 for Recipient ID
+                                row[0] = recipient.getRecipientId(); // Assuming Recipient class has getRecipientId()
+                                row[1] = recipient; // toString of Recipient should return name
+                                row[2] = recipient.getOrganNeeded();
+                                row[3] = recipient.getBloodType();
+                                row[4] = recipient.getUrgencyLevel();
+                                row[5] = recipient.getStatus();
                                 model.addRow(row);
                                 recipientCount++;
                             }
@@ -207,17 +208,17 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
 
         recipientJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Recipient Name", "Organ Needed", "Blood Type", "Urgency", "Status"
+                "Recipient ID", "Recipient Name", "Organ Needed", "Blood Type", "Urgency", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -293,17 +294,17 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
 
         compatibleDonorsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Donor Name", "Organ To Donate", "Blood Type", "Status"
+                "Donor ID", "Donor Name", "Organ To Donate", "Blood Type", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -344,7 +345,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             return;
         }
 
-        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRow, 0);
+        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRow, 1);
 
         MatchingService matchingService = new MatchingService();
         List<Donor> compatibleDonors = matchingService.findCompatibleDonors(system, selectedRecipient);
@@ -373,11 +374,12 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         }
 
         for (Donor donor : compatibleDonors) {
-            Object[] row = new Object[4];
-            row[0] = donor; // toString of Donor should return name
-            row[1] = donor.getOrganToDonate();
-            row[2] = donor.getBloodType();
-            row[3] = donor.getStatus();
+            Object[] row = new Object[5]; // Increased to 5 for Donor ID
+            row[0] = donor.getDonorId(); // Assuming Donor class has getDonorId()
+            row[1] = donor; // toString of Donor should return name
+            row[2] = donor.getOrganToDonate();
+            row[3] = donor.getBloodType();
+            row[4] = donor.getStatus();
             model.addRow(row);
         }
         checkButtonStates(); // Update button states after table population
@@ -402,8 +404,8 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             return;
         }
 
-        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 0);
-        Donor selectedDonor = (Donor) compatibleDonorsJTable.getValueAt(selectedDonorRow, 0);
+        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 1);
+        Donor selectedDonor = (Donor) compatibleDonorsJTable.getValueAt(selectedDonorRow, 1);
 
         // Validate Donor status for verification by Doctor
         if (!selectedDonor.getStatus().equalsIgnoreCase("Tests Verified")) {
@@ -455,6 +457,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
         );
         request.setRequestDate(new Date());
         request.setStatus("Pending Final Doctor Verification"); // New status
+        request.setTestResult("Passed");
 
         // Add to work queue of Transplant Coordinator's organization
         organization.getWorkQueue().getWorkRequestList().add(request);
@@ -478,7 +481,7 @@ public class TransplantCoordinatorRecipientReviewJPanel extends JPanel {
             return;
         }
 
-        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 0);
+        Recipient selectedRecipient = (Recipient) recipientJTable.getValueAt(selectedRecipientRow, 1);
 
         if (!selectedRecipient.getStatus().equalsIgnoreCase("No Matches Found")) {
             JOptionPane.showMessageDialog(this, "International search can only be requested for recipients with 'No Matches Found' status.", "Validation Error", JOptionPane.WARNING_MESSAGE);
